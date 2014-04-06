@@ -28,6 +28,8 @@
         </activity>
         <activity android:name="se.roshauw.podplay.activity.ViewPodcastActivity" >
         </activity>
+        <activity android:name="se.roshauw.podplay.activity.PlayPodcastActivity" >
+        </activity>
         <activity
             android:name="se.roshauw.podplay.activity.SearchPodcastsActivity"
             android:exported="false" >

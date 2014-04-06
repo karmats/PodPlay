@@ -4,6 +4,11 @@
     <string name="app_name">PodPlay</string>
     <string name="action_settings">Settings</string>
     <string name="add_podcast">Add new Podcast</string>
+    
+    <!-- Media controller -->
+    <string name="play">Play</string>
+    <string name="up">Up</string>
+    <string name="down">Down</string>
 
     <!-- Search strings -->
     <string name="menu_search">Search</string>

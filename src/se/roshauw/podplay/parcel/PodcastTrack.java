@@ -12,9 +12,19 @@ import android.os.Parcelable;
  */
 public class PodcastTrack implements Parcelable {
 
+    /**
+     * The podcast is a radio
+     */
+    public static final int TYPE_RADIO = 1;
+    /**
+     * The podcast is a video
+     */
+    public static final int TYPE_VIDEO = 2;
+
     private String title;
     private String description;
     private String fileUrl;
+    private int type;
 
     public PodcastTrack() {
     }
@@ -72,6 +82,14 @@ public class PodcastTrack implements Parcelable {
 
     public void setFileUrl(String fileUrl) {
         this.fileUrl = fileUrl;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 
     @Override

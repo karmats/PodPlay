@@ -32,6 +32,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
+        // Gridview for subscribed podcasts
         GridView gridView = (GridView) findViewById(R.id.gridview);
         mImageAdapter = new ImagePodcastAdapter(this);
         gridView.setAdapter(mImageAdapter);

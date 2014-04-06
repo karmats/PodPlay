@@ -9,11 +9,15 @@ import android.util.Log;
  * 
  */
 public class PodPlayUtil {
-    
+
     /**
      * Intent extras argument key for podcast
      */
     public static final String EXTRA_PODCAST = "extraPodcast";
+    /**
+     * Intent extras argument key for podcast track
+     */
+    public static final String EXTRA_PODCAST_TRACK = "extraPodcastTrack";
 
     /**
      * Tag to be used for logging
@@ -35,5 +39,9 @@ public class PodPlayUtil {
      */
     public static void logError(String message) {
         Log.e(LOG_TAG, message);
+    }
+
+    public static void logException(Exception e) {
+        Log.e(LOG_TAG, e.getClass().getCanonicalName() + " : " + e.getMessage());
     }
 }
