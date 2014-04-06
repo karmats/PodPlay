@@ -1,0 +1,30 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/coverflowPager1"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:overScrollMode="ifContentScrolls" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/coverflowPager2"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:overScrollMode="never" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/coverflowPager3"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:overScrollMode="never" />
+
+    <TextView
+        android:id="@+id/queryText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

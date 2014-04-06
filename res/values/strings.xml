@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">PodPlay</string>
+    <string name="action_settings">Settings</string>
+    <string name="add_podcast">Add new Podcast</string>
+
+    <!-- Search strings -->
+    <string name="menu_search">Search</string>
+    <string name="search_hint">Search podcast</string>
+    <string name="search_title">Add new podcast</string>
+
+    <!-- Podcast Categories -->
+    <string name="arts">Arts</string>
+    <string name="comedy">Comedy</string>
+    <string name="education">Education</string>
+    <string name="kids_family">Kids &amp; Family</string>
+    <string name="health">Helth</string>
+    <string name="tv_film">Tv &amp; Film</string>
+    <string name="music">Music</string>
+    <string name="news_politics">News &amp; Politics</string>
+    <string name="religion_spirituality">Religion &amp; Spirituality</string>
+    <string name="science_medicine">Science &amp; Medicine</string>
+    <string name="sports_recreation">Sports &amp; Recreation</string>
+    <string name="technology">Technology</string>
+    <string name="business">Business</string>
+    <string name="games_hobbies">Games &amp; Hobbies</string>
+    <string name="society_culture">Society &amp; Culture</string>
+    <string name="government_organizations">Governmet &amp; Organizations</string>
+
+</resources>
