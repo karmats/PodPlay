@@ -5,10 +5,8 @@ import java.util.ArrayList;
 import se.roshauw.podplay.R;
 import se.roshauw.podplay.parcel.Podcast;
 import se.roshauw.podplay.task.DownloadImageTask;
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Point;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -73,12 +71,6 @@ public class ImagePodcastAdapter extends BaseAdapter {
         } else {
             frameLayout = (FrameLayout) convertView;
         }
-        Point size = new Point();
-        ((Activity) mContext).getWindowManager().getDefaultDisplay().getSize(size);
-        int screenWidth = size.x;
-
-        frameLayout
-                .setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, screenWidth / 2));
 
         return frameLayout;
     }
@@ -93,7 +85,7 @@ public class ImagePodcastAdapter extends BaseAdapter {
         imageView.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
                 FrameLayout.LayoutParams.WRAP_CONTENT));
         imageView.setAdjustViewBounds(true);
-        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
         new DownloadImageTask(imageView).execute(entry.getImgUrl());
 
         // Add to the view

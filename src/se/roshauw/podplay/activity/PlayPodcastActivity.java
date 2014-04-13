@@ -11,6 +11,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
+
+/**
+ * The activity for playing podcasts
+ * 
+ * @author mats
+ * 
+ */
 public class PlayPodcastActivity extends Activity {
 
     /**
