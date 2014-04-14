@@ -1,18 +1,13 @@
 package se.roshauw.podplay.activity;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import se.roshauw.podplay.R;
 import se.roshauw.podplay.adapter.CoverFlowAdapter;
 import se.roshauw.podplay.parcel.Podcast;
 import se.roshauw.podplay.task.FetchTopPodcastsTask;
-import se.roshauw.podplay.util.PodPlayUtil;
 import android.app.SearchManager;
 import android.app.SearchableInfo;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
@@ -21,7 +16,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.SearchView;
-import android.widget.TextView;
 
 /**
  * Activity for adding a new podcast. Searchbar and toplists are displayed here
@@ -45,21 +39,6 @@ public class AddPodcastActivity extends FragmentActivity {
         mCoverFlowAdapter2 = createPodcastPageAdapter(Podcast.Category.COMEDY, R.id.coverflowPager2);
         mCoverFlowAdapter3 = createPodcastPageAdapter(Podcast.Category.TV_FILM, R.id.coverflowPager3);
 
-        Intent intent = getIntent();
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
-            PodPlayUtil.logInfo("Searching in onCreate for " + query);
-            TextView tv = (TextView) findViewById(R.id.queryText);
-            tv.setText(query);
-        }
-    }
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
-            PodPlayUtil.logInfo("Searching for in onNewIntent for  " + query);
-        }
     }
 
     @Override
@@ -88,11 +67,6 @@ public class AddPodcastActivity extends FragmentActivity {
                 .getDisplayMetrics());
         pager.setPageMargin(-margin);
 
-        /*
-         * List<Podcast> podcasts = createPodcasts(); for (Podcast p : podcasts)
-         * { result.addPodcast(p); } result.notifyDataSetChanged();
-         */
-
         // Fetch top podcasts
         new FetchTopPodcastsTask(getApplicationContext(), result).execute(category);
 
@@ -110,25 +84,4 @@ public class AddPodcastActivity extends FragmentActivity {
         return result;
     }
 
-    private List<Podcast> createPodcasts() {
-        List<Podcast> result = new ArrayList<Podcast>();
-
-        Podcast p1 = new Podcast(1L, "Institutet");
-        p1.setImgUrl("http://a1985.phobos.apple.com/us/r30/Podcasts/v4/62/fe/70/62fe70ac-24ac-e32e-afa1-e918b2635c96/mza_254300554511776881.170x170-75.jpg");
-        result.add(p1);
-
-        Podcast p2 = new Podcast(2L, "Genier");
-        p2.setImgUrl("http://a725.phobos.apple.com/us/r30/Podcasts/v4/48/6d/d9/486dd981-4147-ce9d-02c8-5a2ab1e0457d/mza_6114829249998854242.170x170-75.jpg");
-        result.add(p2);
-
-        Podcast p3 = new Podcast(3L, "Fantasipanelen");
-        p3.setImgUrl("http://a1269.phobos.apple.com/us/r30/Podcasts6/v4/db/33/2d/db332d80-d439-cccb-ee47-0680ee9f0c1f/mza_2025878838078251253.170x170-75.jpg");
-        result.add(p3);
-
-        Podcast p4 = new Podcast(4L, "51% Fotboll");
-        p4.setImgUrl("http://a176.phobos.apple.com/us/r30/Podcasts/v4/9c/14/3a/9c143aa4-e91f-4a94-5682-d355c25ba2cc/mza_3244111744190541961.170x170-75.jpg");
-        result.add(p4);
-
-        return result;
-    }
 }

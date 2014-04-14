@@ -1,33 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginLeft="100dp"
-    android:layout_marginRight="100dp"
-    android:gravity="center"
-    android:orientation="vertical" >
+    android:layout_height="match_parent" >
 
-    <FrameLayout
-        android:layout_width="190dp"
-        android:layout_height="120dp" >
+    <ImageView
+        android:id="@+id/podcast_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/app_name"
+        android:scaleType="fitCenter" />
 
-        <ImageView
-            android:id="@+id/podcastImage"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:adjustViewBounds="true"
-            android:contentDescription="@string/app_name"
-            android:scaleType="centerCrop" />
+    <TextView
+        android:id="@+id/podcast_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:alpha="0.7"
+        android:background="@android:color/black"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@android:color/white"
+        android:padding="10dp" />
 
-        <TextView
-            android:id="@+id/podcastTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:alpha="0.7"
-            android:background="@android:color/black"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@android:color/white" />
-    </FrameLayout>
-
-</LinearLayout>
+</FrameLayout>

@@ -1,12 +1,12 @@
 package se.roshauw.podplay.fragment;
 
 import se.roshauw.podplay.R;
-import se.roshauw.podplay.activity.AddPodcastActivity;
 import se.roshauw.podplay.adapter.ImagePodcastAdapter;
 import se.roshauw.podplay.parcel.Podcast;
-import android.app.Fragment;
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,9 +42,13 @@ public class SubscribedFragment extends Fragment {
 
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 // Check if user clicked the add podcast view
-                if (v.getId() == R.id.addNewPodcastView) {
-                    Intent addNewIntent = new Intent(getActivity().getApplicationContext(), AddPodcastActivity.class);
-                    startActivity(addNewIntent);
+                if (v.getId() == R.id.add_new_podcast_view) {
+                    FragmentManager fragmentManager = getFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.fragment_container, new AddPodcastFragment());
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+                    fragmentManager.executePendingTransactions();
                 }
             }
         });

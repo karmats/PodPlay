@@ -59,14 +59,21 @@ public class ImagePodcastAdapter extends BaseAdapter {
         // if it's not recycled, initialize some
         // attributes
         if (convertView == null) {
-            // Add new podcast as last element
+            // Add new podcast as last elemen
+            LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             if (position == getCount() - 1) {
-                LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 frameLayout = (FrameLayout) inflater.inflate(R.layout.add_podcast, null);
-                frameLayout.setLayoutParams(new AbsListView.LayoutParams(350, 350));
             } else {
-                // Add the podcast images
-                frameLayout = createImageLayout(mContext, podcasts.get(position));
+                // Add the podcast images and titles
+                Podcast podcast = podcasts.get(position);
+                frameLayout = (FrameLayout) inflater.inflate(R.layout.subscribed_podcast_item, null);
+
+                TextView tv = (TextView) frameLayout.findViewById(R.id.podcast_title);
+                tv.setText(podcast.getTitle());
+
+                ImageView imageView = (ImageView) frameLayout.findViewById(R.id.podcast_image);
+                new DownloadImageTask(imageView).execute(podcast.getImgUrl());
+
             }
         } else {
             frameLayout = (FrameLayout) convertView;

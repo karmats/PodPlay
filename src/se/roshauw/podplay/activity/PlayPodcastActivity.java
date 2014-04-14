@@ -49,7 +49,6 @@ public class PlayPodcastActivity extends Activity {
 
             @Override
             public void onBufferingUpdate(MediaPlayer mp, int percent) {
-                PodPlayUtil.logInfo("Buffer update " + percent + "%");
                 tv.setText(percent + "%");
             }
         });
