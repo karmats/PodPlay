@@ -3,8 +3,6 @@ package se.roshauw.podplay;
 import se.roshauw.podplay.fragment.SubscribedFragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 
 /**
@@ -20,12 +18,7 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.fragment_container, new SubscribedFragment());
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
-        fragmentManager.executePendingTransactions();
+        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, new SubscribedFragment()).commit();
 
     }
 

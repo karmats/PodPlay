@@ -1,11 +1,9 @@
 package se.roshauw.podplay.fragment;
 
 import se.roshauw.podplay.R;
-import se.roshauw.podplay.activity.ViewPodcastActivity;
 import se.roshauw.podplay.parcel.Podcast;
 import se.roshauw.podplay.task.DownloadImageTask;
 import se.roshauw.podplay.util.PodPlayUtil;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -49,10 +47,18 @@ public class CoverFlowFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
-                PodPlayUtil.logInfo("Clicking view");
-                Intent viewPodcastIntent = new Intent(getActivity().getApplicationContext(), ViewPodcastActivity.class);
-                viewPodcastIntent.putExtra(PodPlayUtil.EXTRA_PODCAST, podcast);
-                startActivity(viewPodcastIntent);
+                // New view podcast fragment, with the selected podcast as
+                // argument
+                ViewPodcastFragment viewPodcastFragment = new ViewPodcastFragment();
+                Bundle args = new Bundle();
+                args.putParcelable(PodPlayUtil.EXTRA_PODCAST, podcast);
+                viewPodcastFragment.setArguments(args);
+                // It's the parent fragment we want to remove, not a single
+                // coverflow
+                Fragment addPodcastFragment = getFragmentManager().findFragmentByTag(
+                        PodPlayUtil.TAG_ADD_PODCAST_FRAGMENT);
+                getFragmentManager().beginTransaction().remove(addPodcastFragment)
+                        .add(R.id.fragment_container, viewPodcastFragment).addToBackStack(null).commit();
             }
         });
 

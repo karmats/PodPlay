@@ -18,6 +18,10 @@ public class PodPlayUtil {
      * Intent extras argument key for podcast track
      */
     public static final String EXTRA_PODCAST_TRACK = "extraPodcastTrack";
+    /**
+     * Tag for AddPodcastFragment
+     */
+    public static final String TAG_ADD_PODCAST_FRAGMENT = "tagAddPodcastFragment";
 
     /**
      * Tag to be used for logging

@@ -6,6 +6,7 @@ import se.roshauw.podplay.parcel.Podcast;
 import se.roshauw.podplay.parcel.PodcastTrack;
 import se.roshauw.podplay.parse.ItunesApiParser;
 import se.roshauw.podplay.parse.RssPodcastParser;
+import se.roshauw.podplay.util.PodPlayUtil;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.ArrayAdapter;
@@ -39,7 +40,9 @@ public class FetchPodcastTracksTask extends AsyncTask<Podcast, Void, ArrayList<P
 
     @Override
     protected void onPostExecute(ArrayList<PodcastTrack> result) {
+        PodPlayUtil.logInfo("Fetching podcast tracks done, got " + result.size() + " podcast tracks");
         mAdapter.addAll(result);
+        mAdapter.notifyDataSetChanged();
         super.onPostExecute(result);
     }
 

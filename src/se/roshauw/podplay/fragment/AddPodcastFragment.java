@@ -5,6 +5,7 @@ import se.roshauw.podplay.activity.SearchPodcastsActivity;
 import se.roshauw.podplay.adapter.CoverFlowAdapter;
 import se.roshauw.podplay.parcel.Podcast;
 import se.roshauw.podplay.task.FetchTopPodcastsTask;
+import se.roshauw.podplay.util.PodPlayUtil;
 import android.app.SearchManager;
 import android.app.SearchableInfo;
 import android.content.ComponentName;
@@ -30,25 +31,21 @@ import android.widget.SearchView;
  */
 public class AddPodcastFragment extends Fragment {
 
-    CoverFlowAdapter mCoverFlowAdapter1;
-    CoverFlowAdapter mCoverFlowAdapter2;
-    CoverFlowAdapter mCoverFlowAdapter3;
-
-    private LinearLayout mMainLayout;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Search options menu
         setHasOptionsMenu(true);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mMainLayout = (LinearLayout) inflater.inflate(R.layout.podcast_coverflow, container, false);
-        mCoverFlowAdapter1 = createPodcastPageAdapter(null, R.id.coverflowPager1);
-        mCoverFlowAdapter2 = createPodcastPageAdapter(Podcast.Category.COMEDY, R.id.coverflowPager2);
-        mCoverFlowAdapter3 = createPodcastPageAdapter(Podcast.Category.TV_FILM, R.id.coverflowPager3);
-        return mMainLayout;
+        PodPlayUtil.logInfo("Creating add podcast fragment");
+        LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.podcast_coverflow, container, false);
+        createPodcastPageAdapter(null, layout, R.id.coverflowPager1);
+        createPodcastPageAdapter(Podcast.Category.COMEDY, layout, R.id.coverflowPager2);
+        createPodcastPageAdapter(Podcast.Category.TV_FILM, layout, R.id.coverflowPager3);
+        return layout;
     }
 
     @Override
@@ -67,15 +64,16 @@ public class AddPodcastFragment extends Fragment {
 
     }
 
-    private CoverFlowAdapter createPodcastPageAdapter(Podcast.Category category, int viewPagerId) {
+    private CoverFlowAdapter createPodcastPageAdapter(Podcast.Category category, View container, int viewPagerId) {
         final CoverFlowAdapter result = new CoverFlowAdapter(getFragmentManager());
-        final ViewPager pager = (ViewPager) mMainLayout.findViewById(viewPagerId);
+        final ViewPager pager = (ViewPager) container.findViewById(viewPagerId);
         pager.setAdapter(result);
         pager.setOffscreenPageLimit(3);
 
         // The margin as dip
         int margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 200, getResources()
                 .getDisplayMetrics());
+        PodPlayUtil.logInfo("Margin in px " + margin);
         pager.setPageMargin(-margin);
 
         // Fetch top podcasts
