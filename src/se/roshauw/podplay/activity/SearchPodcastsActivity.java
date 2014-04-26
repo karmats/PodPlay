@@ -1,5 +1,6 @@
 package se.roshauw.podplay.activity;
 
+import se.roshauw.podplay.MainActivity;
 import se.roshauw.podplay.R;
 import se.roshauw.podplay.parcel.Podcast;
 import se.roshauw.podplay.task.SearchPodcastTask;
@@ -42,8 +43,8 @@ public class SearchPodcastsActivity extends ListActivity {
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         PodPlayUtil.logInfo("Item " + position + " clicked");
-        Intent viewPodcastIntent = new Intent(SearchPodcastsActivity.this, ViewPodcastActivity.class);
-        viewPodcastIntent.putExtra(PodPlayUtil.EXTRA_PODCAST, mAdapter.getItem(position));
-        startActivity(viewPodcastIntent);
+        Intent mainIntent = new Intent(SearchPodcastsActivity.this, MainActivity.class);
+        mainIntent.putExtra(PodPlayUtil.EXTRA_PODCAST, mAdapter.getItem(position));
+        startActivity(mainIntent);
     }
 }

@@ -58,7 +58,8 @@ public class CoverFlowFragment extends Fragment {
                 Fragment addPodcastFragment = getFragmentManager().findFragmentByTag(
                         PodPlayUtil.TAG_ADD_PODCAST_FRAGMENT);
                 getFragmentManager().beginTransaction().remove(addPodcastFragment)
-                        .add(R.id.fragment_container, viewPodcastFragment).addToBackStack(null).commit();
+                        .add(R.id.fragment_container, viewPodcastFragment, PodPlayUtil.TAG_COVERFLOW_FRAGMENT)
+                        .addToBackStack(null).commit();
             }
         });
 

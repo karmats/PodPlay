@@ -22,6 +22,10 @@ public class PodPlayUtil {
      * Tag for AddPodcastFragment
      */
     public static final String TAG_ADD_PODCAST_FRAGMENT = "tagAddPodcastFragment";
+    /**
+     * Tag for CoverFlowFragment
+     */
+    public static final String TAG_COVERFLOW_FRAGMENT = "tagCoverFlowFragment";
 
     /**
      * Tag to be used for logging
