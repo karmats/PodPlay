@@ -23,12 +23,12 @@ public class ItunesApiParser {
 
     // URL to itunes top podcasts the argument ^1 is the country to get the top
     // podcasts for. ^2 is the possible category
-    private static final String TOP_PODCAST_URL = "http://itunes.apple.com/^1/rss/toppodcasts/limit=10/^2/explicit=true/json";
+    private static final String TOP_PODCAST_URL = "https://itunes.apple.com/^1/rss/toppodcasts/limit=10/^2/explicit=true/json";
     // URL to itunes search api. Argument ^1 is the country. ^2 is the search
     // term
-    private static final String SEARCH_PODCAST_URL = "http://itunes.apple.com/search?country=^1&entity=podcast&term=^2";
+    private static final String SEARCH_PODCAST_URL = "https://itunes.apple.com/search?country=^1&entity=podcast&term=^2";
     // URL to itunes lookup api. Argument ^1 is the id for the podcast
-    private static final String LOOKUP_PODCAST_URL = "http://itunes.apple.com/lookup?id=^1";
+    private static final String LOOKUP_PODCAST_URL = "https://itunes.apple.com/lookup?id=^1";
 
     private Context mContext;
     private HttpConnectionHelper connectionHelper;

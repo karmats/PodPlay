@@ -7,10 +7,11 @@ import se.roshauw.podplay.parcel.Podcast;
 import se.roshauw.podplay.parse.ItunesApiParser;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.support.v4.view.ViewPager;
 
 /**
  * Fetches top podcasts from itunes api. When done, updates the given
- * {@link CoverFlowAdapter} with the result
+ * {@link ViewPager} with the result
  * 
  * @author mats
  * 
@@ -18,11 +19,11 @@ import android.os.AsyncTask;
 public class FetchTopPodcastsTask extends AsyncTask<Podcast.Category, Void, ArrayList<Podcast>> {
 
     private Context mContext;
-    private CoverFlowAdapter mCoverFlowAdapter;
+    private ViewPager mViewPager;
 
-    public FetchTopPodcastsTask(Context context, CoverFlowAdapter coverFlowAdapter) {
+    public FetchTopPodcastsTask(Context context, ViewPager viewPager) {
         this.mContext = context;
-        this.mCoverFlowAdapter = coverFlowAdapter;
+        this.mViewPager = viewPager;
     }
 
     @Override
@@ -35,10 +36,15 @@ public class FetchTopPodcastsTask extends AsyncTask<Podcast.Category, Void, Arra
     protected void onPostExecute(ArrayList<Podcast> result) {
         // Add the podcasts to the coverflow adapter and notify that it has
         // changed
+        CoverFlowAdapter adapter = (CoverFlowAdapter) mViewPager.getAdapter();
         for (Podcast podcast : result) {
-            mCoverFlowAdapter.addPodcast(podcast);
+            adapter.addPodcast(podcast);
         }
-        mCoverFlowAdapter.notifyDataSetChanged();
+        adapter.notifyDataSetChanged();
+        // Set current item to the one in the middle so a cool transition shows
+        if (!result.isEmpty()) {
+            mViewPager.setCurrentItem(result.size() / 2);
+        }
         super.onPostExecute(result);
     }
 }

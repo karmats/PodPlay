@@ -3,7 +3,6 @@ package se.roshauw.podplay.fragment;
 import se.roshauw.podplay.R;
 import se.roshauw.podplay.adapter.ImagePodcastAdapter;
 import se.roshauw.podplay.parcel.Podcast;
-import se.roshauw.podplay.util.PodPlayUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -44,9 +43,8 @@ public class SubscribedFragment extends Fragment {
                 // Check if user clicked the add podcast view
                 if (v.getId() == R.id.add_new_podcast_view) {
                     AddPodcastFragment addPodcastFragment = new AddPodcastFragment();
-                    FragmentManager manger = getFragmentManager();
-                    manger.beginTransaction().remove(SubscribedFragment.this)
-                            .add(R.id.fragment_container, addPodcastFragment, PodPlayUtil.TAG_ADD_PODCAST_FRAGMENT)
+                    FragmentManager manager = getFragmentManager();
+                    manager.beginTransaction().replace(R.id.fragment_container, addPodcastFragment)
                             .addToBackStack(null).commit();
                 }
             }

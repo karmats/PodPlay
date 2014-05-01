@@ -44,7 +44,6 @@ public class ViewPodcastFragment extends Fragment {
 
             ListView trackListView = (ListView) layout.findViewById(R.id.viewPodcastTracks);
             trackListView.setAdapter(mAdapter);
-            PodPlayUtil.logInfo("Adapter has " + mAdapter.getCount() + " in it");
 
             trackListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 

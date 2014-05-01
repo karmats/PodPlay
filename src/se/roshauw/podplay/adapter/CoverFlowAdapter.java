@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import se.roshauw.podplay.fragment.CoverFlowFragment;
 import se.roshauw.podplay.parcel.Podcast;
+import se.roshauw.podplay.parcel.Podcast.Category;
+import se.roshauw.podplay.util.PodPlayUtil;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -17,9 +19,11 @@ import android.support.v4.app.FragmentPagerAdapter;
 public class CoverFlowAdapter extends FragmentPagerAdapter {
 
     private ArrayList<Podcast> podcasts;
+    private Podcast.Category category;
 
-    public CoverFlowAdapter(FragmentManager fm) {
+    public CoverFlowAdapter(FragmentManager fm, Podcast.Category category) {
         super(fm);
+        this.category = category;
         podcasts = new ArrayList<Podcast>();
     }
 
@@ -39,6 +43,13 @@ public class CoverFlowAdapter extends FragmentPagerAdapter {
     @Override
     public int getCount() {
         return podcasts.size();
+    }
+    
+    @Override
+    public long getItemId(int position) {
+        long id = (super.getItemId(position) + 1) * (null != category ? category.hashCode() : 101);
+        PodPlayUtil.logInfo("Item id " + id);
+        return id;
     }
 
 }

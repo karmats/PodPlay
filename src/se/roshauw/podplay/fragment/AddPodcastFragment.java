@@ -47,6 +47,24 @@ public class AddPodcastFragment extends Fragment {
         createPodcastPageAdapter(Podcast.Category.TV_FILM, layout, R.id.coverflowPager3);
         return layout;
     }
+    
+    @Override
+    public void onDestroyView() {
+        PodPlayUtil.logInfo("Destroying view addpodcastfragment");
+        super.onDestroyView();
+    }
+    
+    @Override
+    public void onDestroy() {
+        PodPlayUtil.logInfo("Destroying thefragment");
+        super.onDestroy();
+    }
+    
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        // TODO Save array of already fetched podcasts and get them in onCreateView
+    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -64,20 +82,20 @@ public class AddPodcastFragment extends Fragment {
 
     }
 
-    private CoverFlowAdapter createPodcastPageAdapter(Podcast.Category category, View container, int viewPagerId) {
-        final CoverFlowAdapter result = new CoverFlowAdapter(getFragmentManager());
+    // Creates a view pager and adds it to the view
+    private void createPodcastPageAdapter(Podcast.Category category, View container, int viewPagerId) {
+        final CoverFlowAdapter adapter = new CoverFlowAdapter(getFragmentManager(), category);
         final ViewPager pager = (ViewPager) container.findViewById(viewPagerId);
-        pager.setAdapter(result);
+        pager.setAdapter(adapter);
         pager.setOffscreenPageLimit(3);
 
         // The margin as dip
         int margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 200, getResources()
                 .getDisplayMetrics());
-        PodPlayUtil.logInfo("Margin in px " + margin);
         pager.setPageMargin(-margin);
 
         // Fetch top podcasts
-        new FetchTopPodcastsTask(getActivity().getApplicationContext(), result).execute(category);
+        new FetchTopPodcastsTask(getActivity().getApplicationContext(), pager).execute(category);
 
         pager.setPageTransformer(false, new ViewPager.PageTransformer() {
 
@@ -89,8 +107,6 @@ public class AddPodcastFragment extends Fragment {
                 page.setScaleY(1.2f - scale);
             }
         });
-
-        return result;
     }
 
 }

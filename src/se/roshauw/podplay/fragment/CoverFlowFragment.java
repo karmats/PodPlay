@@ -30,6 +30,7 @@ public class CoverFlowFragment extends Fragment {
      * @return {@link CoverFlowFragment}
      */
     public static CoverFlowFragment create(Podcast podcast) {
+        PodPlayUtil.logInfo("Creating coverflow fragment");
         CoverFlowFragment fragment = new CoverFlowFragment();
         Bundle args = new Bundle();
         args.putParcelable(ARG_PODCAST, podcast);
@@ -39,10 +40,15 @@ public class CoverFlowFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.podcast_coverflow_item_view, container, false);
 
         final Podcast podcast = getArguments().getParcelable(ARG_PODCAST);
+
+        TextView tv = (TextView) rootView.findViewById(R.id.podcastTitle);
+        tv.setText(podcast.getTitle());
+        ImageView iv = (ImageView) rootView.findViewById(R.id.podcastImage);
+        new DownloadImageTask(iv).execute(podcast.getImgUrl());
+
         rootView.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -53,20 +59,11 @@ public class CoverFlowFragment extends Fragment {
                 Bundle args = new Bundle();
                 args.putParcelable(PodPlayUtil.EXTRA_PODCAST, podcast);
                 viewPodcastFragment.setArguments(args);
-                // It's the parent fragment we want to remove, not a single
-                // coverflow
-                Fragment addPodcastFragment = getFragmentManager().findFragmentByTag(
-                        PodPlayUtil.TAG_ADD_PODCAST_FRAGMENT);
-                getFragmentManager().beginTransaction().remove(addPodcastFragment)
-                        .add(R.id.fragment_container, viewPodcastFragment, PodPlayUtil.TAG_COVERFLOW_FRAGMENT)
+                getFragmentManager().beginTransaction().replace(R.id.fragment_container, viewPodcastFragment)
                         .addToBackStack(null).commit();
             }
         });
 
-        TextView tv = (TextView) rootView.findViewById(R.id.podcastTitle);
-        tv.setText(podcast.getTitle());
-        ImageView iv = (ImageView) rootView.findViewById(R.id.podcastImage);
-        new DownloadImageTask(iv).execute(podcast.getImgUrl());
         return rootView;
     }
 
