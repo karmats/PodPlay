@@ -20,7 +20,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.SearchView;
 
 /**
@@ -31,6 +30,9 @@ import android.widget.SearchView;
  */
 public class AddPodcastFragment extends Fragment {
 
+    private CoverFlowAdapter mToplistAdapter;
+    private CoverFlowAdapter mRecommendedAdapter;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,30 +42,23 @@ public class AddPodcastFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        PodPlayUtil.logInfo("Creating add podcast fragment");
-        LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.podcast_coverflow, container, false);
-        createPodcastPageAdapter(null, layout, R.id.coverflowPager1);
-        createPodcastPageAdapter(Podcast.Category.COMEDY, layout, R.id.coverflowPager2);
-        createPodcastPageAdapter(Podcast.Category.TV_FILM, layout, R.id.coverflowPager3);
+        PodPlayUtil.logInfo("onCreateView");
+        View layout = inflater.inflate(R.layout.podcast_coverflow, container, false);
+
+        // Toplist podcasts
+        final ViewPager toplistPager = (ViewPager) layout.findViewById(R.id.toplist_coverflow);
+        if (null == mToplistAdapter) {
+            mToplistAdapter = createPodcastPageAdapter(null, toplistPager);
+        }
+        setupViewPager(toplistPager, mToplistAdapter);
+
+        // Recommended podcasts
+        final ViewPager recommendedPager = (ViewPager) layout.findViewById(R.id.recommended_coverflow);
+        if (null == mRecommendedAdapter) {
+            mRecommendedAdapter = createPodcastPageAdapter(Podcast.Category.COMEDY, recommendedPager);
+        }
+        setupViewPager(recommendedPager, mRecommendedAdapter);
         return layout;
-    }
-    
-    @Override
-    public void onDestroyView() {
-        PodPlayUtil.logInfo("Destroying view addpodcastfragment");
-        super.onDestroyView();
-    }
-    
-    @Override
-    public void onDestroy() {
-        PodPlayUtil.logInfo("Destroying thefragment");
-        super.onDestroy();
-    }
-    
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        // TODO Save array of already fetched podcasts and get them in onCreateView
     }
 
     @Override
@@ -82,10 +77,7 @@ public class AddPodcastFragment extends Fragment {
 
     }
 
-    // Creates a view pager and adds it to the view
-    private void createPodcastPageAdapter(Podcast.Category category, View container, int viewPagerId) {
-        final CoverFlowAdapter adapter = new CoverFlowAdapter(getFragmentManager(), category);
-        final ViewPager pager = (ViewPager) container.findViewById(viewPagerId);
+    private void setupViewPager(final ViewPager pager, final CoverFlowAdapter adapter) {
         pager.setAdapter(adapter);
         pager.setOffscreenPageLimit(3);
 
@@ -94,9 +86,7 @@ public class AddPodcastFragment extends Fragment {
                 .getDisplayMetrics());
         pager.setPageMargin(-margin);
 
-        // Fetch top podcasts
-        new FetchTopPodcastsTask(getActivity().getApplicationContext(), pager).execute(category);
-
+        // Transform page so it looks like a cover flow
         pager.setPageTransformer(false, new ViewPager.PageTransformer() {
 
             @Override
@@ -107,6 +97,19 @@ public class AddPodcastFragment extends Fragment {
                 page.setScaleY(1.2f - scale);
             }
         });
+
+    }
+
+    // Creates a view pager and adds it to the view
+    private CoverFlowAdapter createPodcastPageAdapter(Podcast.Category category, final ViewPager pager) {
+        // The childs fragment manager is used because the view pager is inside
+        // a fragment.
+        final CoverFlowAdapter adapter = new CoverFlowAdapter(getChildFragmentManager());
+
+        // Fetch top podcasts
+        new FetchTopPodcastsTask(getActivity().getApplicationContext(), pager).execute(category);
+
+        return adapter;
     }
 
 }

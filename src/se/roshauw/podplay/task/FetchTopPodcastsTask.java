@@ -37,10 +37,9 @@ public class FetchTopPodcastsTask extends AsyncTask<Podcast.Category, Void, Arra
         // Add the podcasts to the coverflow adapter and notify that it has
         // changed
         CoverFlowAdapter adapter = (CoverFlowAdapter) mViewPager.getAdapter();
-        for (Podcast podcast : result) {
-            adapter.addPodcast(podcast);
-        }
+        adapter.addPodcasts(result);
         adapter.notifyDataSetChanged();
+
         // Set current item to the one in the middle so a cool transition shows
         if (!result.isEmpty()) {
             mViewPager.setCurrentItem(result.size() / 2);

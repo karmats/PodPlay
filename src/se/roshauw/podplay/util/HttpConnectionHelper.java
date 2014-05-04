@@ -33,7 +33,7 @@ public class HttpConnectionHelper {
             connection.setReadTimeout(CONNECTION_TIMEOUT + 2000);
             return connection;
         } catch (Exception e) {
-            PodPlayUtil.logError(e.getMessage());
+            PodPlayUtil.logException(e);
         }
         return null;
     }

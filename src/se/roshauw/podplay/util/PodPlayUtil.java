@@ -28,6 +28,13 @@ public class PodPlayUtil {
     }
 
     /**
+     * Log debug message
+     */
+    public static void logDebug(String message) {
+        Log.d(LOG_TAG, message);
+    }
+
+    /**
      * Log info message
      */
     public static void logInfo(String message) {
@@ -41,7 +48,13 @@ public class PodPlayUtil {
         Log.e(LOG_TAG, message);
     }
 
+    /**
+     * Log an exception
+     * 
+     * @param e
+     *            The exception to log
+     */
     public static void logException(Exception e) {
-        Log.e(LOG_TAG, e.getClass().getCanonicalName() + " : " + e.getMessage());
+        Log.wtf(LOG_TAG, e);
     }
 }

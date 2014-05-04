@@ -22,6 +22,13 @@ public class CoverFlowFragment extends Fragment {
 
     private static String ARG_PODCAST = "podcast";
 
+    // The image view for the image to show
+    private ImageView mImageView;
+    // The podcast associated with this fragment
+    private Podcast mPodcast;
+    // The download image task that starts in onResume, and stops in onPause
+    private DownloadImageTask mDownloadImageTask;
+
     /**
      * Factory method to create new view
      * 
@@ -30,7 +37,6 @@ public class CoverFlowFragment extends Fragment {
      * @return {@link CoverFlowFragment}
      */
     public static CoverFlowFragment create(Podcast podcast) {
-        PodPlayUtil.logInfo("Creating coverflow fragment");
         CoverFlowFragment fragment = new CoverFlowFragment();
         Bundle args = new Bundle();
         args.putParcelable(ARG_PODCAST, podcast);
@@ -42,12 +48,11 @@ public class CoverFlowFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.podcast_coverflow_item_view, container, false);
 
-        final Podcast podcast = getArguments().getParcelable(ARG_PODCAST);
+        mPodcast = getArguments().getParcelable(ARG_PODCAST);
 
         TextView tv = (TextView) rootView.findViewById(R.id.podcastTitle);
-        tv.setText(podcast.getTitle());
-        ImageView iv = (ImageView) rootView.findViewById(R.id.podcastImage);
-        new DownloadImageTask(iv).execute(podcast.getImgUrl());
+        tv.setText(mPodcast.getTitle());
+        mImageView = (ImageView) rootView.findViewById(R.id.podcastImage);
 
         rootView.setOnClickListener(new View.OnClickListener() {
 
@@ -57,14 +62,36 @@ public class CoverFlowFragment extends Fragment {
                 // argument
                 ViewPodcastFragment viewPodcastFragment = new ViewPodcastFragment();
                 Bundle args = new Bundle();
-                args.putParcelable(PodPlayUtil.EXTRA_PODCAST, podcast);
+                args.putParcelable(PodPlayUtil.EXTRA_PODCAST, mPodcast);
                 viewPodcastFragment.setArguments(args);
-                getFragmentManager().beginTransaction().replace(R.id.fragment_container, viewPodcastFragment)
-                        .addToBackStack(null).commit();
+                // Get the parent fragments fragmentmanager since that has the
+                // fragment_container
+                getParentFragment().getFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, viewPodcastFragment).addToBackStack(null).commit();
             }
         });
 
         return rootView;
+    }
+
+    @Override
+    public void onPause() {
+        // If the mDowloadImageTask is running, cancel it so it doesn't do an
+        // unnecessarily download
+        if (null != mDownloadImageTask && !mDownloadImageTask.isCancelled()) {
+            mDownloadImageTask.cancel(true);
+        }
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        // Start the mDownloadImageTask
+        if (null != mImageView && null != mPodcast) {
+            mDownloadImageTask = new DownloadImageTask(mImageView);
+            mDownloadImageTask.execute(mPodcast.getImgUrl());
+        }
+        super.onResume();
     }
 
 }

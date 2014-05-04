@@ -11,26 +11,15 @@
         android:text="@string/add_podcast" />
 
     <android.support.v4.view.ViewPager
-        android:id="@+id/coverflowPager1"
+        android:id="@+id/toplist_coverflow"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:overScrollMode="ifContentScrolls" />
 
     <android.support.v4.view.ViewPager
-        android:id="@+id/coverflowPager2"
+        android:id="@+id/recommended_coverflow"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:overScrollMode="never" />
-
-    <android.support.v4.view.ViewPager
-        android:id="@+id/coverflowPager3"
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:overScrollMode="never" />
-
-    <TextView
-        android:id="@+id/queryText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
 
 </LinearLayout>

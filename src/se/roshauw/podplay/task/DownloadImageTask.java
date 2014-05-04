@@ -1,6 +1,7 @@
 package se.roshauw.podplay.task;
 
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.URL;
 
 import se.roshauw.podplay.util.PodPlayUtil;
@@ -19,6 +20,7 @@ import android.widget.ImageView;
 public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
 
     private ImageView imageView;
+    private HttpURLConnection connection;
 
     public DownloadImageTask(ImageView imageView) {
         this.imageView = imageView;
@@ -28,16 +30,28 @@ public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         String url = urls[0];
         Bitmap internetImg = null;
         try {
-            InputStream is = new URL(url).openStream();
+            connection = (HttpURLConnection) new URL(url).openConnection();
+            InputStream is = connection.getInputStream();
             internetImg = BitmapFactory.decodeStream(is);
         } catch (Exception e) {
-            PodPlayUtil.logError(e.getMessage());
+            PodPlayUtil.logException(e);
+        } finally {
+            connection.disconnect();
         }
         return internetImg;
     }
 
     protected void onPostExecute(Bitmap result) {
         imageView.setImageBitmap(result);
+    }
+
+    @Override
+    protected void onCancelled() {
+        // Disconnect if a connection is active
+        if (null != connection) {
+            connection.disconnect();
+        }
+        super.onCancelled();
     }
 
 }

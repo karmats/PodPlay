@@ -94,32 +94,39 @@ public class ItunesApiParser {
                 JSONArray entries = feed.getJSONArray("entry");
                 // Parse all entries and add to the result
                 for (int i = 0; i < entries.length(); i++) {
-                    JSONObject entry = entries.getJSONObject(i);
-                    String name = entry.getJSONObject("im:name").getString("label");
-                    String id = entry.getJSONObject("id").getJSONObject("attributes").getString("im:id");
-                    Podcast podcast = new Podcast(Long.parseLong(id), name);
-                    podcast.setDescription(entry.getJSONObject("summary").getString("label"));
+                    try {
+                        JSONObject entry = entries.getJSONObject(i);
+                        String name = entry.getJSONObject("im:name").getString("label");
+                        String id = entry.getJSONObject("id").getJSONObject("attributes").getString("im:id");
+                        Podcast podcast = new Podcast(Long.parseLong(id), name);
+                        podcast.setDescription(entry.getJSONObject("summary").getString("label"));
 
-                    // Get the img, we want the img with highest resolution, so
-                    // we loop through the images and set the imgUrl to the img
-                    // with highest height
-                    int height = 0;
-                    JSONArray imgArray = entry.getJSONArray("im:image");
-                    for (int j = 0; j < imgArray.length(); j++) {
-                        JSONObject imgJson = imgArray.getJSONObject(j);
-                        int imgHeight = Integer.parseInt(imgJson.getJSONObject("attributes").getString("height"));
-                        if (imgHeight > height) {
-                            height = imgHeight;
-                            podcast.setImgUrl(imgJson.getString("label"));
+                        // Get the img, we want the img with highest resolution,
+                        // so
+                        // we loop through the images and set the imgUrl to the
+                        // img
+                        // with highest height
+                        int height = 0;
+                        JSONArray imgArray = entry.getJSONArray("im:image");
+                        for (int j = 0; j < imgArray.length(); j++) {
+                            JSONObject imgJson = imgArray.getJSONObject(j);
+                            int imgHeight = Integer.parseInt(imgJson.getJSONObject("attributes").getString("height"));
+                            if (imgHeight > height) {
+                                height = imgHeight;
+                                podcast.setImgUrl(imgJson.getString("label"));
+                            }
                         }
+                        podcast.getCategoryIds().add(
+                                Integer.parseInt(entry.getJSONObject("category").getJSONObject("attributes")
+                                        .getString("im:id")));
+                        result.add(podcast);
+                    } catch (JSONException e) {
+                        PodPlayUtil.logException(e);
                     }
-                    podcast.getCategoryIds().add(
-                            Integer.parseInt(entry.getJSONObject("category").getJSONObject("attributes")
-                                    .getString("im:id")));
-                    result.add(podcast);
                 }
+
             } catch (JSONException e) {
-                PodPlayUtil.logError(e.getMessage());
+                PodPlayUtil.logException(e);
             } finally {
                 connection.disconnect();
             }
