@@ -11,7 +11,6 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.GridView;
@@ -82,6 +81,7 @@ public class ImagePodcastAdapter extends BaseAdapter {
         return frameLayout;
     }
 
+    // TODO Remove this and replace with xml-layout-file
     public FrameLayout createImageLayout(Context c, Podcast entry) {
 
         FrameLayout frameLayout = new FrameLayout(c);

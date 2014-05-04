@@ -40,9 +40,10 @@ public class FetchTopPodcastsTask extends AsyncTask<Podcast.Category, Void, Arra
         adapter.addPodcasts(result);
         adapter.notifyDataSetChanged();
 
-        // Set current item to the one in the middle so a cool transition shows
+        // Set current item to the one in the middle so a cool transition shows,
+        // and the carousel effect will kick in
         if (!result.isEmpty()) {
-            mViewPager.setCurrentItem(result.size() / 2);
+            mViewPager.setCurrentItem((result.size() * CoverFlowAdapter.CAROUSEL_LOOPS) / 2);
         }
         super.onPostExecute(result);
     }

@@ -19,37 +19,37 @@ import android.widget.ImageView;
  */
 public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
 
-    private ImageView imageView;
-    private HttpURLConnection connection;
+    private ImageView mImageView;
+    private HttpURLConnection mConnection;
 
     public DownloadImageTask(ImageView imageView) {
-        this.imageView = imageView;
+        this.mImageView = imageView;
     }
 
     protected Bitmap doInBackground(String... urls) {
         String url = urls[0];
         Bitmap internetImg = null;
         try {
-            connection = (HttpURLConnection) new URL(url).openConnection();
-            InputStream is = connection.getInputStream();
+            mConnection = (HttpURLConnection) new URL(url).openConnection();
+            InputStream is = mConnection.getInputStream();
             internetImg = BitmapFactory.decodeStream(is);
         } catch (Exception e) {
             PodPlayUtil.logException(e);
         } finally {
-            connection.disconnect();
+            mConnection.disconnect();
         }
         return internetImg;
     }
 
     protected void onPostExecute(Bitmap result) {
-        imageView.setImageBitmap(result);
+        mImageView.setImageBitmap(result);
     }
 
     @Override
     protected void onCancelled() {
         // Disconnect if a connection is active
-        if (null != connection) {
-            connection.disconnect();
+        if (null != mConnection) {
+            mConnection.disconnect();
         }
         super.onCancelled();
     }
