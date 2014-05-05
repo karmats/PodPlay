@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="bottom"
-        sothree:dragView="@+id/name"
+        sothree:dragView="@+id/media_playing_text"
         sothree:panelHeight="68dp"
         sothree:paralaxOffset="100dp"
         sothree:shadowHeight="4dp" >
@@ -16,7 +16,7 @@
         <FrameLayout
             android:id="@+id/fragment_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent" >
         </FrameLayout>
 
         <LinearLayout
@@ -37,13 +37,13 @@
                     android:id="@+id/media_play_button"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.18"
-                    android:background="@color/black"
+                    android:layout_weight="0.10"
+                    android:background="@drawable/circle"
                     android:contentDescription="@string/play"
-                    android:src="@drawable/ic_action_play" />
+                    android:src="@drawable/ic_action_pause_over_video" />
 
                 <TextView
-                    android:id="@+id/mediaPlayingText"
+                    android:id="@+id/media_playing_text"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -51,6 +51,15 @@
                     android:paddingLeft="10dp"
                     android:textSize="14sp" />
             </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:scaleType="fitStart"
+                android:src="@drawable/filipofredrik"
+                android:contentDescription="@string/arts" >
+            </ImageView>
         </LinearLayout>
     </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 

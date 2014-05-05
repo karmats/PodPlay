@@ -2,8 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="100dp"
-    android:paddingRight="100dp"
     android:gravity="center"
     android:orientation="vertical" >
 
@@ -12,7 +10,7 @@
         android:layout_height="120dp" >
 
         <ImageView
-            android:id="@+id/podcastImage"
+            android:id="@+id/podcast_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:adjustViewBounds="true"
@@ -20,7 +18,7 @@
             android:scaleType="fitCenter" />
 
         <TextView
-            android:id="@+id/podcastTitle"
+            android:id="@+id/podcast_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"

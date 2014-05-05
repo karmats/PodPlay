@@ -93,7 +93,8 @@ public class ImagePodcastAdapter extends BaseAdapter {
                 FrameLayout.LayoutParams.WRAP_CONTENT));
         imageView.setAdjustViewBounds(true);
         imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        new DownloadImageTask(imageView).execute(entry.getImgUrl());
+        imageView.setImageResource(R.drawable.filipofredrik);
+        //new DownloadImageTask(imageView).execute(entry.getImgUrl());
 
         // Add to the view
         frameLayout.addView(imageView);

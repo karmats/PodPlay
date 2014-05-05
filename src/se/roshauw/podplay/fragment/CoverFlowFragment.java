@@ -50,9 +50,9 @@ public class CoverFlowFragment extends Fragment {
 
         mPodcast = getArguments().getParcelable(ARG_PODCAST);
 
-        TextView tv = (TextView) rootView.findViewById(R.id.podcastTitle);
+        TextView tv = (TextView) rootView.findViewById(R.id.podcast_title);
         tv.setText(mPodcast.getTitle());
-        mImageView = (ImageView) rootView.findViewById(R.id.podcastImage);
+        mImageView = (ImageView) rootView.findViewById(R.id.podcast_image);
 
         rootView.setOnClickListener(new View.OnClickListener() {
 

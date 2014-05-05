@@ -93,8 +93,8 @@ public class AddPodcastFragment extends Fragment {
             public void transformPage(View page, float position) {
                 page.setRotationY(position * -50);
                 float scale = position < 0 ? position * -1 : position;
-                page.setScaleX(1.2f - scale);
-                page.setScaleY(1.2f - scale);
+                page.setScaleX(1f - scale);
+                page.setScaleY(1f - scale);
             }
         });
 

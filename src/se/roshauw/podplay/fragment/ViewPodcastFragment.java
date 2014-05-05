@@ -1,12 +1,11 @@
 package se.roshauw.podplay.fragment;
 
+import se.roshauw.podplay.MainActivity;
 import se.roshauw.podplay.R;
-import se.roshauw.podplay.activity.PlayPodcastActivity;
 import se.roshauw.podplay.parcel.Podcast;
 import se.roshauw.podplay.parcel.PodcastTrack;
 import se.roshauw.podplay.task.FetchPodcastTracksTask;
 import se.roshauw.podplay.util.PodPlayUtil;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -50,9 +49,8 @@ public class ViewPodcastFragment extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                     PodcastTrack trackToPlay = mAdapter.getItem(position);
-                    Intent playIntent = new Intent(getActivity().getApplicationContext(), PlayPodcastActivity.class);
-                    playIntent.putExtra(PodPlayUtil.EXTRA_PODCAST_TRACK, trackToPlay);
-                    startActivity(playIntent);
+                    MainActivity mainActivity = (MainActivity) getActivity();
+                    mainActivity.playPodcastTrack(trackToPlay);
                 }
 
             });
