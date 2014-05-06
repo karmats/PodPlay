@@ -39,10 +39,23 @@ public class MainActivity extends FragmentActivity {
 
         // Setup the media player
         mMediaPlayer = new MediaPlayer();
-        mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 
         // Disable the Play Button until the media player is ready
         mPlayButton.setEnabled(false);
+        // Play/Pause when hitting play button
+        mPlayButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (mMediaPlayer.isPlaying()) {
+                    mMediaPlayer.pause();
+                    mPlayButton.setImageResource(R.drawable.ic_action_play_over_video);
+                } else {
+                    mMediaPlayer.start();
+                    mPlayButton.setImageResource(R.drawable.ic_action_pause_over_video);
+                }
+            }
+        });
 
         // When a podcast extra is set, this is a result from the
         // SearchPodcastActivity.
@@ -88,16 +101,17 @@ public class MainActivity extends FragmentActivity {
      *            The track to play
      */
     public void playPodcastTrack(final PodcastTrack podcastTrack) {
-        // Stop and reset the podast if it's playing
-        if (mMediaPlayer.isPlaying()) {
-            mMediaPlayer.stop();
-            mMediaPlayer.reset();
-        }
+        mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        // Stop and reset the podast in case it's already prepared
+        mMediaPlayer.stop();
+        mMediaPlayer.reset();
+
         try {
             PodPlayUtil.logInfo("Playing media from " + podcastTrack.getFileUrl());
             mMediaPlayer.setDataSource(podcastTrack.getFileUrl());
             mMediaPlayer.prepareAsync();
         } catch (Exception e) {
+            mPlayingText.setText(e.getMessage());
             PodPlayUtil.logException(e);
         }
 
@@ -107,24 +121,21 @@ public class MainActivity extends FragmentActivity {
             public void onPrepared(MediaPlayer mp) {
                 // Set podcast track text and start playing
                 mPlayingText.setText(podcastTrack.getTitle());
-                mMediaPlayer.start();
+                mMediaPlayer.start(); 
                 mPlayButton.setEnabled(true);
             }
         });
 
-        // Play/Pause when hitting play button
-        mPlayButton.setOnClickListener(new View.OnClickListener() {
+        // Error listener if something went wrong with prepareAsync
+        mMediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
 
             @Override
-            public void onClick(View v) {
-                if (mMediaPlayer.isPlaying()) {
-                    mMediaPlayer.pause();
-                    mPlayButton.setImageResource(R.drawable.ic_action_play_over_video);
-                } else {
-                    mMediaPlayer.start();
-                    mPlayButton.setImageResource(R.drawable.ic_action_pause_over_video);
-                }
+            public boolean onError(MediaPlayer mp, int what, int extra) {
+                mPlayingText.setText("Got error " + what + " Extra " + extra);
+                mp.reset();
+                return true;
             }
         });
+
     }
 }

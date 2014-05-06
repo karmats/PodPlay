@@ -30,17 +30,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="68dp"
+                android:background="@color/black"
                 android:orientation="horizontal"
                 android:padding="5dp" >
-
-                <ImageButton
-                    android:id="@+id/media_play_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.10"
-                    android:background="@drawable/circle"
-                    android:contentDescription="@string/play"
-                    android:src="@drawable/ic_action_pause_over_video" />
 
                 <TextView
                     android:id="@+id/media_playing_text"
@@ -49,16 +41,27 @@
                     android:layout_weight="1"
                     android:gravity="center_vertical"
                     android:paddingLeft="10dp"
+                    android:textColor="@color/white"
                     android:textSize="14sp" />
+
+                <ImageButton
+                    android:id="@+id/media_play_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:contentDescription="@string/play"
+                    android:gravity="right"
+                    android:src="@drawable/ic_action_pause_over_video" />
             </LinearLayout>
 
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
+                android:background="@color/black"
+                android:contentDescription="@string/arts"
                 android:scaleType="fitStart"
-                android:src="@drawable/filipofredrik"
-                android:contentDescription="@string/arts" >
+                android:src="@drawable/filipofredrik" >
             </ImageView>
         </LinearLayout>
     </com.sothree.slidinguppanel.SlidingUpPanelLayout>
