@@ -14,6 +14,8 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
+
 /**
  * Main activity for the application. All fragments will be created from here
  * 
@@ -22,6 +24,8 @@ import android.widget.TextView;
  */
 public class MainActivity extends FragmentActivity {
 
+    // The sliding up panel for viewing media controller
+    private SlidingUpPanelLayout mSlidingUpPanelLayout;
     // The MediaPlayer that plays the podcast
     private MediaPlayer mMediaPlayer;
     // Play button
@@ -34,6 +38,7 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
+        mSlidingUpPanelLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
         mPlayButton = (ImageButton) findViewById(R.id.media_play_button);
         mPlayingText = (TextView) findViewById(R.id.media_playing_text);
 
@@ -94,6 +99,15 @@ public class MainActivity extends FragmentActivity {
         return true;
     }
 
+    @Override
+    public void onBackPressed() {
+        if (mSlidingUpPanelLayout.isExpanded()) {
+            mSlidingUpPanelLayout.collapsePane();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
     /**
      * Plays a podcast track.
      * 
@@ -121,8 +135,9 @@ public class MainActivity extends FragmentActivity {
             public void onPrepared(MediaPlayer mp) {
                 // Set podcast track text and start playing
                 mPlayingText.setText(podcastTrack.getTitle());
-                mMediaPlayer.start(); 
+                mMediaPlayer.start();
                 mPlayButton.setEnabled(true);
+                mPlayButton.setImageResource(R.drawable.ic_action_pause_over_video);
             }
         });
 
