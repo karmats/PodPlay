@@ -1,6 +1,8 @@
 package se.roshauw.podplay.parse;
 
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
@@ -46,7 +48,13 @@ public class ItunesApiParser {
      * @return List of {@link Podcast}
      */
     public ArrayList<Podcast> searchPodcasts(String query) {
-        String[] values = { mContext.getResources().getConfiguration().locale.getCountry(), query };
+        // Query needs to be encoded
+        String queryUrlEncoded = query;
+        try {
+            queryUrlEncoded = URLEncoder.encode(query, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+        }
+        String[] values = { mContext.getResources().getConfiguration().locale.getCountry(), queryUrlEncoded };
         // Format the url so country and search query will be in it
         String url = TextUtils.expandTemplate(SEARCH_PODCAST_URL, values).toString();
         return getItunesSearchResultForUrl(url);
