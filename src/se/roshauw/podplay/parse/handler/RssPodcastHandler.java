@@ -41,6 +41,13 @@ public class RssPodcastHandler extends DefaultHandler {
             podcastTracks.add(currentPodcastTrack);
         } else if (qName.equals("enclosure")) {
             currentPodcastTrack.setFileUrl(attributes.getValue("url"));
+            String type = attributes.getValue("type");
+            if (null != type && type.startsWith("video")) {
+                currentPodcastTrack.setType(PodcastTrack.TYPE_VIDEO);
+            } else {
+                // Default audio type
+                currentPodcastTrack.setType(PodcastTrack.TYPE_AUDIO);
+            }
         }
     }
 

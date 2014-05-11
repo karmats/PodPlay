@@ -13,11 +13,11 @@ import android.os.Parcelable;
 public class PodcastTrack implements Parcelable {
 
     /**
-     * The podcast is a radio
+     * The podcast is of audio type
      */
-    public static final int TYPE_RADIO = 1;
+    public static final int TYPE_AUDIO = 1;
     /**
-     * The podcast is a video
+     * The podcast is of video type
      */
     public static final int TYPE_VIDEO = 2;
 
@@ -34,6 +34,7 @@ public class PodcastTrack implements Parcelable {
         title = data.getString("title");
         description = data.getString("description");
         fileUrl = data.getString("fileUrl");
+        type = data.getInt("type");
     }
 
     public static final Parcelable.Creator<PodcastTrack> CREATOR = new Parcelable.Creator<PodcastTrack>() {
@@ -52,6 +53,7 @@ public class PodcastTrack implements Parcelable {
         data.putString("title", title);
         data.putString("description", description);
         data.putString("fileUrl", fileUrl);
+        data.putInt("type", type);
         dest.writeBundle(data);
     }
 

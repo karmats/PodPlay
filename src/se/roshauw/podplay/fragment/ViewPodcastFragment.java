@@ -31,7 +31,7 @@ public class ViewPodcastFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.view_podcast, container, false);
 
-        Podcast podcast = getArguments().getParcelable(PodPlayUtil.EXTRA_PODCAST);
+        final Podcast podcast = getArguments().getParcelable(PodPlayUtil.EXTRA_PODCAST);
         PodPlayUtil.logInfo("Got podcast in fragment " + podcast);
 
         if (podcast != null) {
@@ -50,7 +50,7 @@ public class ViewPodcastFragment extends Fragment {
                 public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                     PodcastTrack trackToPlay = mAdapter.getItem(position);
                     MainActivity mainActivity = (MainActivity) getActivity();
-                    mainActivity.playPodcastTrack(trackToPlay);
+                    mainActivity.playPodcastTrack(podcast, trackToPlay);
                 }
 
             });

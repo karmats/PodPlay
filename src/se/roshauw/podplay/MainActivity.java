@@ -10,8 +10,11 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
@@ -32,6 +35,11 @@ public class MainActivity extends FragmentActivity {
     private ImageButton mPlayButton;
     // Podcast title
     private TextView mPlayingText;
+    // Podcast image display view
+    private ImageView mPodcastImgView;
+    // View for video display
+    private SurfaceView mPodcastVideoView;
+    private SurfaceHolder mSurfaceHolder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,9 +49,30 @@ public class MainActivity extends FragmentActivity {
         mSlidingUpPanelLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
         mPlayButton = (ImageButton) findViewById(R.id.media_play_button);
         mPlayingText = (TextView) findViewById(R.id.media_playing_text);
+        mPodcastImgView = (ImageView) findViewById(R.id.media_podcast_img);
+        mPodcastVideoView = (SurfaceView) findViewById(R.id.media_podcast_video);
+        // So we don't create a black whole when sliding up/down the
+        // SlidingUpPanel
+        mPodcastVideoView.setZOrderOnTop(true);
 
-        // Setup the media player
+        // Setup the media player and surface holder for video playback
         mMediaPlayer = new MediaPlayer();
+        mSurfaceHolder = mPodcastVideoView.getHolder();
+        mSurfaceHolder.addCallback(new SurfaceHolder.Callback() {
+
+            @Override
+            public void surfaceDestroyed(SurfaceHolder holder) {
+            }
+
+            @Override
+            public void surfaceCreated(SurfaceHolder holder) {
+                mMediaPlayer.setDisplay(mSurfaceHolder);
+            }
+
+            @Override
+            public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+            }
+        });
 
         // Disable the Play Button until the media player is ready
         mPlayButton.setEnabled(false);
@@ -109,16 +138,25 @@ public class MainActivity extends FragmentActivity {
     }
 
     /**
-     * Plays a podcast track.
+     * Plays a podcast track. Sets up the video view if it's a video.
      * 
+     * @param podcast
+     *            The podcast the track belongs to
      * @param podcastTrack
      *            The track to play
      */
-    public void playPodcastTrack(final PodcastTrack podcastTrack) {
-        mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        // Stop and reset the podast in case it's already prepared
-        mMediaPlayer.stop();
+    public void playPodcastTrack(final Podcast podcast, final PodcastTrack podcastTrack) {
+        // Setup the podcast image or video if this is a video podcast
+        if (podcastTrack.getType() == PodcastTrack.TYPE_VIDEO) {
+            mPodcastVideoView.setVisibility(View.VISIBLE);
+            mPodcastImgView.setVisibility(View.GONE);
+        } else { // Audio
+            mPodcastImgView.setVisibility(View.VISIBLE);
+            mPodcastVideoView.setVisibility(View.GONE);
+        }
+        // Reset the podast in case it's already prepared
         mMediaPlayer.reset();
+        mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 
         try {
             PodPlayUtil.logInfo("Playing media from " + podcastTrack.getFileUrl());
