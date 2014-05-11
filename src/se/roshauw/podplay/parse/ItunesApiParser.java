@@ -107,7 +107,8 @@ public class ItunesApiParser {
                         String name = entry.getJSONObject("im:name").getString("label");
                         String id = entry.getJSONObject("id").getJSONObject("attributes").getString("im:id");
                         Podcast podcast = new Podcast(Long.parseLong(id), name);
-                        podcast.setDescription(entry.getJSONObject("summary").getString("label"));
+                        podcast.setDescription(entry.has("summary") ? entry.getJSONObject("summary").getString("label")
+                                : "");
 
                         // Get the img, we want the img with highest resolution,
                         // so
@@ -115,7 +116,8 @@ public class ItunesApiParser {
                         // img
                         // with highest height
                         int height = 0;
-                        JSONArray imgArray = entry.getJSONArray("im:image");
+                        JSONArray imgArray = entry.has("im:image") ? entry.getJSONArray("im:image") : new JSONArray(
+                                new ArrayList<JSONObject>());
                         for (int j = 0; j < imgArray.length(); j++) {
                             JSONObject imgJson = imgArray.getJSONObject(j);
                             int imgHeight = Integer.parseInt(imgJson.getJSONObject("attributes").getString("height"));
@@ -125,8 +127,8 @@ public class ItunesApiParser {
                             }
                         }
                         podcast.getCategoryIds().add(
-                                Integer.parseInt(entry.getJSONObject("category").getJSONObject("attributes")
-                                        .getString("im:id")));
+                                Integer.parseInt(entry.has("category") ? entry.getJSONObject("category")
+                                        .getJSONObject("attributes").getString("im:id") : "-1"));
                         result.add(podcast);
                     } catch (JSONException e) {
                         PodPlayUtil.logException(e);
