@@ -5,6 +5,7 @@ import se.roshauw.podplay.fragment.ViewPodcastFragment;
 import se.roshauw.podplay.parcel.Podcast;
 import se.roshauw.podplay.parcel.PodcastTrack;
 import se.roshauw.podplay.util.PodPlayUtil;
+
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -21,9 +22,8 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 /**
  * Main activity for the application. All fragments will be created from here
- * 
+ *
  * @author mats
- * 
  */
 public class MainActivity extends FragmentActivity {
 
@@ -93,7 +93,7 @@ public class MainActivity extends FragmentActivity {
 
         // When a podcast extra is set, this is a result from the
         // SearchPodcastActivity.
-        // The we need to start the ViewPodcastFragment
+        // Then we need to start the ViewPodcastFragment
         Podcast podcastExtra = null;
         if (null != getIntent() && null != getIntent().getExtras()) {
             podcastExtra = getIntent().getExtras().getParcelable(PodPlayUtil.EXTRA_PODCAST);
@@ -115,7 +115,7 @@ public class MainActivity extends FragmentActivity {
 
     @Override
     protected void onDestroy() {
-        // Reset the media player
+        // Release the media player
         mMediaPlayer.release();
         mMediaPlayer = null;
         super.onDestroy();
@@ -139,11 +139,9 @@ public class MainActivity extends FragmentActivity {
 
     /**
      * Plays a podcast track. Sets up the video view if it's a video.
-     * 
-     * @param podcast
-     *            The podcast the track belongs to
-     * @param podcastTrack
-     *            The track to play
+     *
+     * @param podcast      The podcast the track belongs to
+     * @param podcastTrack The track to play
      */
     public void playPodcastTrack(final Podcast podcast, final PodcastTrack podcastTrack) {
         // Setup the podcast image or video if this is a video podcast
@@ -163,10 +161,10 @@ public class MainActivity extends FragmentActivity {
             mMediaPlayer.setDataSource(podcastTrack.getFileUrl());
             mMediaPlayer.prepareAsync();
         } catch (Exception e) {
-            // Recreate the media player
+            mPlayingText.setText(e.getMessage());
+            // Recreate the mediaplayer
             mMediaPlayer.release();
             mMediaPlayer = new MediaPlayer();
-            mPlayingText.setText(e.getMessage());
             PodPlayUtil.logException(e);
         }
 
@@ -188,7 +186,7 @@ public class MainActivity extends FragmentActivity {
             @Override
             public boolean onError(MediaPlayer mp, int what, int extra) {
                 mPlayingText.setText("Got error " + what + " Extra " + extra);
-                // Recreate the media player
+                // Recreate the mediaplayer
                 mMediaPlayer.release();
                 mMediaPlayer = new MediaPlayer();
                 return true;
