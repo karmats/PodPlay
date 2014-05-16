@@ -163,6 +163,9 @@ public class MainActivity extends FragmentActivity {
             mMediaPlayer.setDataSource(podcastTrack.getFileUrl());
             mMediaPlayer.prepareAsync();
         } catch (Exception e) {
+            // Recreate the media player
+            mMediaPlayer.release();
+            mMediaPlayer = new MediaPlayer();
             mPlayingText.setText(e.getMessage());
             PodPlayUtil.logException(e);
         }
@@ -185,7 +188,9 @@ public class MainActivity extends FragmentActivity {
             @Override
             public boolean onError(MediaPlayer mp, int what, int extra) {
                 mPlayingText.setText("Got error " + what + " Extra " + extra);
-                mp.reset();
+                // Recreate the media player
+                mMediaPlayer.release();
+                mMediaPlayer = new MediaPlayer();
                 return true;
             }
         });
