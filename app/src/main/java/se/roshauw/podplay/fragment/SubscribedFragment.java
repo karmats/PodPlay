@@ -33,7 +33,7 @@ public class SubscribedFragment extends Fragment {
         GridView layout = (GridView) inflater.inflate(R.layout.subscribed, container, false);
         mImageAdapter = new ImagePodcastAdapter(getActivity().getApplicationContext());
         layout.setAdapter(mImageAdapter);
-        Podcast testPod = new Podcast(0L, "VŠrvet");
+        Podcast testPod = new Podcast(0L, "VÃ¤rvet");
         testPod.setImgUrl("http://a1059.phobos.apple.com/us/r30/Podcasts6/v4/1e/fa/69/1efa6962-c51d-398d-fb81-52d4f13b1dea/mza_2906164569851893566.170x170-75.jpg");
         mImageAdapter.addPodcast(testPod);
 
