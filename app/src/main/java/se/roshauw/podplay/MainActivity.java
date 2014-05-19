@@ -1,14 +1,9 @@
 package se.roshauw.podplay;
 
-import se.roshauw.podplay.fragment.SubscribedFragment;
-import se.roshauw.podplay.fragment.ViewPodcastFragment;
-import se.roshauw.podplay.parcel.Podcast;
-import se.roshauw.podplay.parcel.PodcastTrack;
-import se.roshauw.podplay.util.PodPlayUtil;
-
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.SurfaceHolder;
@@ -16,9 +11,18 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
+
+import se.roshauw.podplay.fragment.SubscribedFragment;
+import se.roshauw.podplay.fragment.ViewPodcastFragment;
+import se.roshauw.podplay.parcel.Podcast;
+import se.roshauw.podplay.parcel.PodcastTrack;
+import se.roshauw.podplay.task.MediaSeekBarTask;
+import se.roshauw.podplay.util.PodPlayUtil;
 
 /**
  * Main activity for the application. All fragments will be created from here
@@ -40,6 +44,11 @@ public class MainActivity extends FragmentActivity {
     // View for video display
     private SurfaceView mPodcastVideoView;
     private SurfaceHolder mSurfaceHolder;
+    // Linear layout that holds media controller buttons
+    private LinearLayout mMediaControllerLayout;
+    // Variables needed for the seek bar
+    private SeekBar mSeekBar;
+    private Handler mSeekBarHandler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +59,9 @@ public class MainActivity extends FragmentActivity {
         mPlayButton = (ImageButton) findViewById(R.id.media_play_button);
         mPlayingText = (TextView) findViewById(R.id.media_playing_text);
         mPodcastImgView = (ImageView) findViewById(R.id.media_podcast_img);
+        mMediaControllerLayout = (LinearLayout) findViewById(R.id.media_controller);
+        mSeekBar = (SeekBar) findViewById(R.id.media_seek);
+        mSeekBar.setEnabled(false);
         mPodcastVideoView = (SurfaceView) findViewById(R.id.media_podcast_video);
         // So we don't create a black whole when sliding up/down the
         // SlidingUpPanel
@@ -152,6 +164,8 @@ public class MainActivity extends FragmentActivity {
             mPodcastImgView.setVisibility(View.VISIBLE);
             mPodcastVideoView.setVisibility(View.GONE);
         }
+        mMediaControllerLayout.setVisibility(View.VISIBLE);
+
         // Reset the podast in case it's already prepared
         mMediaPlayer.reset();
         mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
@@ -175,10 +189,26 @@ public class MainActivity extends FragmentActivity {
                 // Set podcast track text and start playing
                 mPlayingText.setText(podcastTrack.getTitle());
                 mMediaPlayer.start();
+
+                // Enable the play button and set the correct image for it
                 mPlayButton.setEnabled(true);
                 mPlayButton.setImageResource(R.drawable.ic_action_pause_over_video);
+
+                // Enable the seek bar and start new runnable to post media duration to it
+                mSeekBar.setEnabled(true);
+                mSeekBar.setMax(mMediaPlayer.getDuration());
+                mSeekBarHandler.post(new MediaSeekBarTask(mSeekBar, mMediaPlayer, mSeekBarHandler));
             }
         });
+
+        mMediaPlayer.setOnBufferingUpdateListener(new MediaPlayer.OnBufferingUpdateListener() {
+            @Override
+            public void onBufferingUpdate(MediaPlayer mediaPlayer, int percentage) {
+                int duration = mMediaPlayer.getDuration();
+                mSeekBar.setSecondaryProgress((duration * percentage) / 100);
+            }
+        });
+
 
         // Error listener if something went wrong with prepareAsync
         mMediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
@@ -192,6 +222,27 @@ public class MainActivity extends FragmentActivity {
                 return true;
             }
         });
+
+        // Seek bar setup
+        mSeekBar.setMax(120);
+        mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (fromUser) {
+                    mMediaPlayer.seekTo(progress);
+                    mSeekBar.setProgress(progress);
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
+
 
     }
 }
