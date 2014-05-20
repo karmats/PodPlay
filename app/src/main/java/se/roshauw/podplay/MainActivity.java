@@ -5,6 +5,7 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
+import android.text.format.DateUtils;
 import android.view.Menu;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -21,6 +22,7 @@ import se.roshauw.podplay.fragment.SubscribedFragment;
 import se.roshauw.podplay.fragment.ViewPodcastFragment;
 import se.roshauw.podplay.parcel.Podcast;
 import se.roshauw.podplay.parcel.PodcastTrack;
+import se.roshauw.podplay.task.DownloadImageTask;
 import se.roshauw.podplay.task.MediaSeekBarTask;
 import se.roshauw.podplay.util.PodPlayUtil;
 
@@ -47,7 +49,10 @@ public class MainActivity extends FragmentActivity {
     // Linear layout that holds media controller buttons
     private LinearLayout mMediaControllerLayout;
     // Variables needed for the seek bar
+    private LinearLayout mSeekBarController;
     private SeekBar mSeekBar;
+    private TextView mDurationTextView;
+    private TextView mElapsedTextView;
     private Handler mSeekBarHandler = new Handler();
     private Runnable mMediaSeekBarTask;
 
@@ -61,8 +66,11 @@ public class MainActivity extends FragmentActivity {
         mPlayingText = (TextView) findViewById(R.id.media_playing_text);
         mPodcastImgView = (ImageView) findViewById(R.id.media_podcast_img);
         mMediaControllerLayout = (LinearLayout) findViewById(R.id.media_controller);
+        mSeekBarController = (LinearLayout) findViewById(R.id.media_seek_bar_controller);
         mSeekBar = (SeekBar) findViewById(R.id.media_seek);
         mSeekBar.setEnabled(false);
+        mDurationTextView = (TextView) findViewById(R.id.media_time_duration);
+        mElapsedTextView = (TextView) findViewById(R.id.media_time_elapsed);
         mPodcastVideoView = (SurfaceView) findViewById(R.id.media_podcast_video);
         // So we don't create a black whole when sliding up/down the
         // SlidingUpPanel
@@ -178,9 +186,12 @@ public class MainActivity extends FragmentActivity {
             mPodcastImgView.setVisibility(View.GONE);
         } else { // Audio
             mPodcastImgView.setVisibility(View.VISIBLE);
+            // Sets the podcasts image to the image view
+            new DownloadImageTask(mPodcastImgView).execute(podcast.getImgUrl());
             mPodcastVideoView.setVisibility(View.GONE);
         }
         mMediaControllerLayout.setVisibility(View.VISIBLE);
+        mSeekBarController.setVisibility(View.VISIBLE);
 
         // Reset the seek bar runnable
         stopSeekBarTask();
@@ -217,13 +228,16 @@ public class MainActivity extends FragmentActivity {
                 mSeekBar.setEnabled(true);
                 mSeekBar.setMax(mMediaPlayer.getDuration());
                 startSeekBarTask();
+
+                String durationString = DateUtils.formatElapsedTime(mMediaPlayer.getDuration() / 1000);
+                mDurationTextView.setText(durationString);
             }
         });
 
         mMediaPlayer.setOnBufferingUpdateListener(new MediaPlayer.OnBufferingUpdateListener() {
             @Override
             public void onBufferingUpdate(MediaPlayer mediaPlayer, int percentage) {
-                int duration = mMediaPlayer.getDuration();
+                int duration = mSeekBar.getMax();
                 mSeekBar.setSecondaryProgress((duration * percentage) / 100);
             }
         });
@@ -275,7 +289,7 @@ public class MainActivity extends FragmentActivity {
     private void startSeekBarTask() {
         if (mMediaPlayer.isPlaying()) {
             if (null == mMediaSeekBarTask) {
-                mMediaSeekBarTask = new MediaSeekBarTask(mSeekBar, mMediaPlayer, mSeekBarHandler);
+                mMediaSeekBarTask = new MediaSeekBarTask(mSeekBar, mElapsedTextView, mMediaPlayer, mSeekBarHandler);
             }
             mSeekBarHandler.post(mMediaSeekBarTask);
         }

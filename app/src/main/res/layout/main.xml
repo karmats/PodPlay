@@ -37,6 +37,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
+                    android:scrollHorizontally="true"
                     android:ellipsize="marquee"
                     android:paddingLeft="10dp"
                     android:textColor="@color/white"
@@ -57,6 +58,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
+                android:padding="20dp"
                 android:contentDescription="@string/arts"
                 android:scaleType="fitStart"
                 android:src="@drawable/filipofredrik"
@@ -67,12 +69,48 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
+                android:padding="20dp"
                 android:visibility="gone" />
 
-            <SeekBar
-                android:id="@+id/media_seek"
+            <LinearLayout
+                android:id="@+id/media_seek_bar_controller"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="20dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/media_time_elapsed"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.15"
+                    android:scrollHorizontally="true"
+                    android:ellipsize="marquee"
+                    android:textColor="@color/white"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="10dp"
+                    android:textSize="12sp" />
+
+                <SeekBar
+                    android:id="@+id/media_seek"
+                    android:layout_weight="0.7"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/media_time_duration"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.15"
+                    android:layout_gravity="center"
+                    android:scrollHorizontally="true"
+                    android:ellipsize="marquee"
+                    android:textColor="@color/white"
+                    android:layout_marginLeft="10dp"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/media_controller"
