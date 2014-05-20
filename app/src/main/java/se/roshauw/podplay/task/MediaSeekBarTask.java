@@ -23,8 +23,21 @@ public class MediaSeekBarTask implements Runnable {
 
     @Override
     public void run() {
-        mSeekBar.setProgress(mMediaPlayer.getCurrentPosition());
-        PodPlayUtil.logDebug("Setting progress to " + mMediaPlayer.getCurrentPosition());
-        mHandler.postDelayed(this, DELAY);
+        boolean stopped = false;
+        if (mMediaPlayer.isPlaying()) {
+            int duration = mMediaPlayer.getDuration();
+            int position = mMediaPlayer.getCurrentPosition();
+            if (position < duration) {
+                mSeekBar.setProgress(position);
+                PodPlayUtil.logDebug("Setting progress to " + position + ", duration is " + duration);
+            } else {
+                mHandler.removeCallbacks(this);
+                stopped = true;
+                PodPlayUtil.logDebug("Stopping update");
+            }
+        }
+        if (!stopped) {
+            mHandler.postDelayed(this, DELAY);
+        }
     }
 }

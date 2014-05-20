@@ -49,6 +49,7 @@ public class MainActivity extends FragmentActivity {
     // Variables needed for the seek bar
     private SeekBar mSeekBar;
     private Handler mSeekBarHandler = new Handler();
+    private Runnable mMediaSeekBarTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,11 +127,26 @@ public class MainActivity extends FragmentActivity {
     }
 
     @Override
+    protected void onPause() {
+        stopSeekBarTask();
+        super.onPause();
+    }
+
+    @Override
     protected void onDestroy() {
+        // Stop the seek bar task and null it
+        stopSeekBarTask();
+        mMediaSeekBarTask = null;
         // Release the media player
         mMediaPlayer.release();
         mMediaPlayer = null;
         super.onDestroy();
+    }
+
+    @Override
+    protected void onResume() {
+        startSeekBarTask();
+        super.onResume();
     }
 
     @Override
@@ -166,6 +182,9 @@ public class MainActivity extends FragmentActivity {
         }
         mMediaControllerLayout.setVisibility(View.VISIBLE);
 
+        // Reset the seek bar runnable
+        stopSeekBarTask();
+
         // Reset the podast in case it's already prepared
         mMediaPlayer.reset();
         mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
@@ -197,7 +216,7 @@ public class MainActivity extends FragmentActivity {
                 // Enable the seek bar and start new runnable to post media duration to it
                 mSeekBar.setEnabled(true);
                 mSeekBar.setMax(mMediaPlayer.getDuration());
-                mSeekBarHandler.post(new MediaSeekBarTask(mSeekBar, mMediaPlayer, mSeekBarHandler));
+                startSeekBarTask();
             }
         });
 
@@ -244,5 +263,21 @@ public class MainActivity extends FragmentActivity {
         });
 
 
+    }
+
+    // private function
+    private void stopSeekBarTask() {
+        if (null != mMediaSeekBarTask) {
+            mSeekBarHandler.removeCallbacks(mMediaSeekBarTask);
+        }
+    }
+
+    private void startSeekBarTask() {
+        if (mMediaPlayer.isPlaying()) {
+            if (null == mMediaSeekBarTask) {
+                mMediaSeekBarTask = new MediaSeekBarTask(mSeekBar, mMediaPlayer, mSeekBarHandler);
+            }
+            mSeekBarHandler.post(mMediaSeekBarTask);
+        }
     }
 }
