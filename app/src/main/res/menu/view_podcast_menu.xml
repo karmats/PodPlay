@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_subscribe"
+        android:icon="@drawable/ic_action_subsribe"
+        android:showAsAction="ifRoom|collapseActionView"
+        android:title="@string/menu_subscribe" />
+</menu>

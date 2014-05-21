@@ -11,9 +11,12 @@
     <string name="down">Down</string>
 
     <!-- Search strings -->
-    <string name="menu_search">Search</string>
     <string name="search_hint">Search podcast</string>
     <string name="search_title">Add new podcast</string>
+
+    <!-- Menu strings -->
+    <string name="menu_search">Search</string>
+    <string name="menu_subscribe">Subscribe</string>
 
     <!-- Podcast Categories -->
     <string name="arts">Arts</string>

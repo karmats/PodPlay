@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import se.roshauw.podplay.R;
+import se.roshauw.podplay.database.DatabaseHelper;
+
+import android.content.ContentValues;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -11,9 +14,8 @@ import android.os.Parcelable;
 /**
  * Class to describe a podcast. The id and title fields are final, and must be
  * set in constructor
- * 
+ *
  * @author mats
- * 
  */
 public class Podcast implements Parcelable {
 
@@ -110,7 +112,28 @@ public class Podcast implements Parcelable {
     public List<PodcastTrack> getTracks() {
         return tracks;
     }
-    
+
+    /**
+     * @return A set of values with the associated database table
+     * columns
+     */
+    public ContentValues toContentValues() {
+        ContentValues result = new ContentValues();
+        result.put(DatabaseHelper.COLUMN_TITLE, title);
+        result.put(DatabaseHelper.COLUMN_DESCRIPTION, description);
+        result.put(DatabaseHelper.COLUMN_IMAGE_REF, imgUrl);
+        result.put(DatabaseHelper.COLUMN_FEED_URL, feedUrl);
+        String categoryString = null;
+        for (int i = 0; i < categoryIds.size(); i++) {
+            categoryString += categoryIds.get(i);
+            if (i + 1 < categoryIds.size()) {
+                categoryString += ",";
+            }
+        }
+        result.put(DatabaseHelper.COLUMN_CATEGORY_IDS, categoryString);
+        return result;
+    }
+
     @Override
     public String toString() {
         return title;
@@ -119,9 +142,8 @@ public class Podcast implements Parcelable {
     /**
      * Used to describe podcast categories. The <code>itunesId</code> represents the category
      * id from itunes, and the <code>stringId</code> represents the id defined in strings.xml
-     * 
+     *
      * @author mats
-     * 
      */
     public enum Category {
 
@@ -164,12 +186,11 @@ public class Podcast implements Parcelable {
         public int getItunesId() {
             return itunesId;
         }
-        
+
         /**
          * Gets a {@link Category} for a specific itunes id
-         * 
-         * @param id
-         *            The category id in itunes
+         *
+         * @param id The category id in itunes
          * @return {@link Category}
          */
         static Category getCategoryForItunesId(int id) {

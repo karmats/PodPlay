@@ -1,8 +1,7 @@
 package se.roshauw.podplay.fragment;
 
-import se.roshauw.podplay.R;
-import se.roshauw.podplay.adapter.ImagePodcastAdapter;
-import se.roshauw.podplay.parcel.Podcast;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,12 +12,18 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 
+import java.util.ArrayList;
+
+import se.roshauw.podplay.R;
+import se.roshauw.podplay.adapter.ImagePodcastAdapter;
+import se.roshauw.podplay.database.DatabaseHelper;
+import se.roshauw.podplay.parcel.Podcast;
+
 /**
  * Fragment to show subscribed podcasts. All subscribed podcasts are show in a
  * gridview
- * 
+ *
  * @author mats
- * 
  */
 public class SubscribedFragment extends Fragment {
 
@@ -33,9 +38,10 @@ public class SubscribedFragment extends Fragment {
         GridView layout = (GridView) inflater.inflate(R.layout.subscribed, container, false);
         mImageAdapter = new ImagePodcastAdapter(getActivity().getApplicationContext());
         layout.setAdapter(mImageAdapter);
-        Podcast testPod = new Podcast(0L, "Värvet");
-        testPod.setImgUrl("http://a1059.phobos.apple.com/us/r30/Podcasts6/v4/1e/fa/69/1efa6962-c51d-398d-fb81-52d4f13b1dea/mza_2906164569851893566.170x170-75.jpg");
-        mImageAdapter.addPodcast(testPod);
+        ArrayList<Podcast> subscribedPodcasts = getPodcastsFromDB();
+        for (Podcast p : subscribedPodcasts) {
+            mImageAdapter.addPodcast(p);
+        }
 
         layout.setOnItemClickListener(new OnItemClickListener() {
 
@@ -51,5 +57,22 @@ public class SubscribedFragment extends Fragment {
         });
 
         return layout;
+    }
+
+    private ArrayList<Podcast> getPodcastsFromDB() {
+        ArrayList<Podcast> result = new ArrayList<Podcast>();
+        SQLiteDatabase db = new DatabaseHelper(getActivity().getApplicationContext()).getReadableDatabase();
+        // Read all stored podcasts
+        Cursor c = db.query(DatabaseHelper.TABLE_NAME,
+                DatabaseHelper.columns, null, new String[]{}, null, null,
+                null);
+        while (c.moveToNext()) {
+            Podcast p = new Podcast(c.getLong(c.getColumnIndex(DatabaseHelper.COLUMN_ID)),
+                    c.getString(c.getColumnIndex(DatabaseHelper.COLUMN_TITLE)));
+            p.setFeedUrl(c.getString(c.getColumnIndex(DatabaseHelper.COLUMN_FEED_URL)));
+            p.setImgUrl(c.getString(c.getColumnIndex(DatabaseHelper.COLUMN_IMAGE_REF)));
+            result.add(p);
+        }
+        return result;
     }
 }

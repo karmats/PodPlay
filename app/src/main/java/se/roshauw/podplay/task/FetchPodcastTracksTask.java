@@ -7,6 +7,7 @@ import se.roshauw.podplay.parcel.PodcastTrack;
 import se.roshauw.podplay.parse.ItunesApiParser;
 import se.roshauw.podplay.parse.RssPodcastParser;
 import se.roshauw.podplay.util.PodPlayUtil;
+
 import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.ArrayAdapter;
@@ -14,9 +15,8 @@ import android.widget.ArrayAdapter;
 /**
  * Fetches podcasttracks from the podcast feed url. When done, updates the given
  * adapter with the result
- * 
+ *
  * @author mats
- * 
  */
 public class FetchPodcastTracksTask extends AsyncTask<Podcast, Void, ArrayList<PodcastTrack>> {
 
@@ -32,7 +32,9 @@ public class FetchPodcastTracksTask extends AsyncTask<Podcast, Void, ArrayList<P
     protected ArrayList<PodcastTrack> doInBackground(Podcast... podcast) {
         Podcast p = podcast[0];
         if (p.getFeedUrl() == null) {
-            p = new ItunesApiParser(mContext).getPodcastById(p.getId());
+            // If the feed url is missing, a query to the itunes api is needed
+            Podcast tmp = new ItunesApiParser(mContext).getPodcastById(p.getId());
+            p.setFeedUrl(tmp.getFeedUrl());
         }
         RssPodcastParser rssParser = new RssPodcastParser();
         return rssParser.getTracksForPodcast(p);
