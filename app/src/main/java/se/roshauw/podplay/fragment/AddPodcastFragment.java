@@ -1,11 +1,5 @@
 package se.roshauw.podplay.fragment;
 
-import se.roshauw.podplay.R;
-import se.roshauw.podplay.activity.SearchPodcastsActivity;
-import se.roshauw.podplay.adapter.CoverFlowAdapter;
-import se.roshauw.podplay.parcel.Podcast;
-import se.roshauw.podplay.task.FetchTopPodcastsTask;
-import se.roshauw.podplay.util.PodPlayUtil;
 import android.app.SearchManager;
 import android.app.SearchableInfo;
 import android.content.ComponentName;
@@ -22,16 +16,32 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
 
+import se.roshauw.podplay.R;
+import se.roshauw.podplay.activity.SearchPodcastsActivity;
+import se.roshauw.podplay.adapter.CoverFlowAdapter;
+import se.roshauw.podplay.parcel.Podcast;
+import se.roshauw.podplay.task.FetchTopPodcastsTask;
+import se.roshauw.podplay.util.PodPlayUtil;
+
 /**
  * Fragment for adding podcasts
- * 
+ *
  * @author mats
- * 
  */
 public class AddPodcastFragment extends Fragment {
 
     private CoverFlowAdapter mToplistAdapter;
     private CoverFlowAdapter mRecommendedAdapter;
+
+    /**
+     * Creates a new instance of AddPodcastFragment.
+     *
+     * @return AddPodcastFragment
+     */
+    public static AddPodcastFragment create() {
+        AddPodcastFragment fragment = new AddPodcastFragment();
+        return fragment;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

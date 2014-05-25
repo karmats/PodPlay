@@ -1,16 +1,18 @@
 package se.roshauw.podplay.fragment;
 
-import se.roshauw.podplay.R;
-import se.roshauw.podplay.parcel.Podcast;
-import se.roshauw.podplay.task.DownloadImageTask;
-import se.roshauw.podplay.util.PodPlayUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import se.roshauw.podplay.R;
+import se.roshauw.podplay.parcel.Podcast;
+import se.roshauw.podplay.task.DownloadImageTask;
+import se.roshauw.podplay.util.PodPlayUtil;
 
 /**
  * Page fragment for displaying podcasts in cover flow carousel.
@@ -67,7 +69,8 @@ public class CoverFlowFragment extends Fragment {
                 // Get the parent fragments fragmentmanager since that has the
                 // fragment_container
                 getParentFragment().getFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, viewPodcastFragment).addToBackStack(null).commit();
+                        .replace(R.id.fragment_container, viewPodcastFragment).addToBackStack(null)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit();
             }
         });
 

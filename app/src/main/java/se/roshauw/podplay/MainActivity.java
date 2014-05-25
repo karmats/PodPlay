@@ -121,13 +121,11 @@ public class MainActivity extends FragmentActivity {
         }
         PodPlayUtil.logInfo("Got podcast " + podcastExtra + " as extra");
         if (null == podcastExtra) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SubscribedFragment())
+            SubscribedFragment subscribedFragment = SubscribedFragment.create();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, subscribedFragment)
                     .commit();
         } else {
-            Bundle bundle = new Bundle();
-            bundle.putParcelable(PodPlayUtil.EXTRA_PODCAST, podcastExtra);
-            ViewPodcastFragment viewPodcastFragment = new ViewPodcastFragment();
-            viewPodcastFragment.setArguments(bundle);
+            ViewPodcastFragment viewPodcastFragment = ViewPodcastFragment.create(podcastExtra);
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, viewPodcastFragment)
                     .commit();
         }

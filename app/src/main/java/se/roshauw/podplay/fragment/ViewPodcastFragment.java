@@ -30,9 +30,25 @@ import se.roshauw.podplay.util.PodPlayUtil;
  */
 public class ViewPodcastFragment extends Fragment {
 
+    private static String ARG_PODCAST = "podcast";
+
     // The podcast to view
     private Podcast mPodcast;
     private ArrayAdapter<PodcastTrack> mAdapter;
+
+    /**
+     * Creates a new instance of ViewPodcastFragment.
+     *
+     * @param podcast The podcast to view
+     * @return ViewPodcastFragment
+     */
+    public static ViewPodcastFragment create(Podcast podcast) {
+        ViewPodcastFragment fragment = new ViewPodcastFragment();
+        Bundle args = new Bundle();
+        args.putParcelable(ARG_PODCAST, podcast);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -97,7 +113,7 @@ public class ViewPodcastFragment extends Fragment {
 
     // Stores the current podcast to the database. Returns the row generated id
     private long subscribeToPodcast() {
-        SQLiteDatabase db =  new DatabaseHelper(getActivity().getApplicationContext()).getWritableDatabase();
+        SQLiteDatabase db = new DatabaseHelper(getActivity().getApplicationContext()).getWritableDatabase();
         return db.insert(DatabaseHelper.TABLE_NAME, null, mPodcast.toContentValues());
     }
 }

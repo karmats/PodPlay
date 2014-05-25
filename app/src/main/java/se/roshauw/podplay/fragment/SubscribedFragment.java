@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import se.roshauw.podplay.R;
 import se.roshauw.podplay.adapter.ImagePodcastAdapter;
 import se.roshauw.podplay.database.DatabaseHelper;
 import se.roshauw.podplay.parcel.Podcast;
+import se.roshauw.podplay.util.PodPlayUtil;
 
 /**
  * Fragment to show subscribed podcasts. All subscribed podcasts are show in a
@@ -26,6 +28,16 @@ import se.roshauw.podplay.parcel.Podcast;
  * @author mats
  */
 public class SubscribedFragment extends Fragment {
+
+    /**
+     * Creates a new instance of SubscribedFragment.
+     *
+     * @return SubscribedFragment
+     */
+    public static SubscribedFragment create() {
+        SubscribedFragment fragment = new SubscribedFragment();
+        return fragment;
+    }
 
     /**
      * ImageAdapter for the image GridView
@@ -48,10 +60,19 @@ public class SubscribedFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 // Check if user clicked the add podcast view
                 if (v.getId() == R.id.add_new_podcast_view) {
-                    AddPodcastFragment addPodcastFragment = new AddPodcastFragment();
+                    AddPodcastFragment addPodcastFragment = AddPodcastFragment.create();
                     FragmentManager manager = getFragmentManager();
                     manager.beginTransaction().replace(R.id.fragment_container, addPodcastFragment)
-                            .addToBackStack(null).commit();
+                            .addToBackStack(null).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit();
+                } else {
+                    // Open the view podcast fragment for the selected podcast
+                    Podcast podcast = (Podcast) mImageAdapter.getItem(position);
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable(PodPlayUtil.EXTRA_PODCAST, podcast);
+                    ViewPodcastFragment viewPodcastFragment = new ViewPodcastFragment();
+                    viewPodcastFragment.setArguments(bundle);
+                    getFragmentManager().beginTransaction().replace(R.id.fragment_container, viewPodcastFragment)
+                            .addToBackStack(null).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit();
                 }
             }
         });
