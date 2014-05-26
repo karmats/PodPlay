@@ -1,15 +1,15 @@
 package se.roshauw.podplay.parcel;
 
+import android.content.ContentValues;
+import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import se.roshauw.podplay.R;
 import se.roshauw.podplay.database.DatabaseHelper;
-
-import android.content.ContentValues;
-import android.os.Bundle;
-import android.os.Parcel;
-import android.os.Parcelable;
 
 /**
  * Class to describe a podcast. The id and title fields are final, and must be
@@ -21,6 +21,7 @@ public class Podcast implements Parcelable {
 
     private final Long id;
     private final String title;
+    private Long dbId;
     private String description;
     private String imgUrl;
     private String feedUrl;
@@ -38,6 +39,7 @@ public class Podcast implements Parcelable {
         Bundle data = source.readBundle();
         id = data.getLong("id");
         title = data.getString("title");
+        dbId = data.getLong("dbId");
         description = data.getString("description");
         imgUrl = data.getString("imgUrl");
         feedUrl = data.getString("feedUrl");
@@ -60,6 +62,7 @@ public class Podcast implements Parcelable {
         Bundle data = new Bundle();
         data.putLong("id", id);
         data.putString("title", title);
+        data.putLong("dbId", dbId);
         data.putString("description", description);
         data.putString("imgUrl", imgUrl);
         data.putString("feedUrl", feedUrl);
@@ -79,6 +82,14 @@ public class Podcast implements Parcelable {
 
     public String getTitle() {
         return title;
+    }
+
+    public Long getDbId() {
+        return dbId;
+    }
+
+    public void setDbId(Long dbId) {
+        this.dbId = dbId;
     }
 
     public String getDescription() {
@@ -119,11 +130,12 @@ public class Podcast implements Parcelable {
      */
     public ContentValues toContentValues() {
         ContentValues result = new ContentValues();
+        result.put(DatabaseHelper.COLUMN_ITUNES_ID, id);
         result.put(DatabaseHelper.COLUMN_TITLE, title);
         result.put(DatabaseHelper.COLUMN_DESCRIPTION, description);
         result.put(DatabaseHelper.COLUMN_IMAGE_REF, imgUrl);
         result.put(DatabaseHelper.COLUMN_FEED_URL, feedUrl);
-        String categoryString = null;
+        String categoryString = "";
         for (int i = 0; i < categoryIds.size(); i++) {
             categoryString += categoryIds.get(i);
             if (i + 1 < categoryIds.size()) {

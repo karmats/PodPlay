@@ -12,13 +12,11 @@ import android.widget.TextView;
 import se.roshauw.podplay.R;
 import se.roshauw.podplay.parcel.Podcast;
 import se.roshauw.podplay.task.DownloadImageTask;
-import se.roshauw.podplay.util.PodPlayUtil;
 
 /**
  * Page fragment for displaying podcasts in cover flow carousel.
- * 
+ *
  * @author mats
- * 
  */
 public class CoverFlowFragment extends Fragment {
 
@@ -33,9 +31,8 @@ public class CoverFlowFragment extends Fragment {
 
     /**
      * Factory method to create new view
-     * 
-     * @param podcast
-     *            The {@link Podcast} to create view for
+     *
+     * @param podcast The {@link Podcast} to create view for
      * @return {@link CoverFlowFragment}
      */
     public static CoverFlowFragment create(Podcast podcast) {
@@ -62,10 +59,7 @@ public class CoverFlowFragment extends Fragment {
             public void onClick(View v) {
                 // New view podcast fragment, with the selected podcast as
                 // argument
-                ViewPodcastFragment viewPodcastFragment = new ViewPodcastFragment();
-                Bundle args = new Bundle();
-                args.putParcelable(PodPlayUtil.EXTRA_PODCAST, mPodcast);
-                viewPodcastFragment.setArguments(args);
+                ViewPodcastFragment viewPodcastFragment = ViewPodcastFragment.create(mPodcast);
                 // Get the parent fragments fragmentmanager since that has the
                 // fragment_container
                 getParentFragment().getFragmentManager().beginTransaction()

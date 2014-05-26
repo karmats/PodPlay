@@ -13,6 +13,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Column names
     public static final String COLUMN_ID = "_id";
+    public static final String COLUMN_ITUNES_ID = "itunes_id";
     public static final String COLUMN_TITLE = "title";
     public static final String COLUMN_DESCRIPTION = "description";
     public static final String COLUMN_IMAGE_REF = "img_ref";
@@ -25,6 +26,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private final static String CREATE =
             "CREATE TABLE " + TABLE_NAME + " (" + COLUMN_ID
                     + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                    + COLUMN_ITUNES_ID + " INTEGER, "
                     + COLUMN_TITLE + " TEXT NOT NULL, "
                     + COLUMN_DESCRIPTION + " TEXT, "
                     + COLUMN_IMAGE_REF + " TEXT, "

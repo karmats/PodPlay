@@ -60,7 +60,7 @@ public class ViewPodcastFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.view_podcast, container, false);
 
-        mPodcast = getArguments().getParcelable(PodPlayUtil.EXTRA_PODCAST);
+        mPodcast = getArguments().getParcelable(ARG_PODCAST);
         PodPlayUtil.logInfo("Got podcast in fragment " + mPodcast);
 
         if (null != mPodcast) {
@@ -102,8 +102,14 @@ public class ViewPodcastFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_subscribe:
-                long dbId = subscribeToPodcast();
-                PodPlayUtil.logDebug("Subscribing to podcast, got db id " + dbId);
+                // If the podcast is subscribed, we unsubscribe to it
+                if (null != mPodcast.getDbId() && unsubscribeToPodcast()) {
+                    PodPlayUtil.logDebug("Unsubscribed to podcast");
+                } else {
+                    long dbId = subscribeToPodcast();
+                    mPodcast.setDbId(dbId);
+                    PodPlayUtil.logDebug("Subscribing to podcast, got db id " + dbId);
+                }
                 return true;
             default:
                 PodPlayUtil.logInfo(item.getTitle() + " is not a menu");
@@ -114,6 +120,17 @@ public class ViewPodcastFragment extends Fragment {
     // Stores the current podcast to the database. Returns the row generated id
     private long subscribeToPodcast() {
         SQLiteDatabase db = new DatabaseHelper(getActivity().getApplicationContext()).getWritableDatabase();
-        return db.insert(DatabaseHelper.TABLE_NAME, null, mPodcast.toContentValues());
+        long id = db.insert(DatabaseHelper.TABLE_NAME, null, mPodcast.toContentValues());
+        db.close();
+        return id;
+    }
+
+    // Unseubscribe to the current podcast. Deletes all data from the database.
+    private boolean unsubscribeToPodcast() {
+        SQLiteDatabase db = new DatabaseHelper(getActivity().getApplicationContext()).getWritableDatabase();
+        long result = db.delete(DatabaseHelper.TABLE_NAME, DatabaseHelper.COLUMN_ID + "=?",
+                new String[]{String.valueOf(mPodcast.getDbId())});
+        db.close();
+        return result > 0;
     }
 }
