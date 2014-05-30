@@ -1,20 +1,19 @@
 package se.roshauw.podplay.task;
 
-import java.util.ArrayList;
-
-import se.roshauw.podplay.activity.SearchPodcastsActivity;
-import se.roshauw.podplay.parcel.Podcast;
-import se.roshauw.podplay.parse.ItunesApiParser;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.ArrayAdapter;
 
+import java.util.ArrayList;
+
+import se.roshauw.podplay.parcel.Podcast;
+import se.roshauw.podplay.parse.ItunesApiParser;
+
 /**
  * Task to search for podcasts. When done updates the
- * {@link SearchPodcastsActivity} with the result
- * 
+ * adapter with the result
+ *
  * @author mats
- * 
  */
 public class SearchPodcastTask extends AsyncTask<String, Void, ArrayList<Podcast>> {
 

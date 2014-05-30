@@ -20,7 +20,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_FEED_URL = "feed_url";
     public static final String COLUMN_CATEGORY_IDS = "category_ids";
 
-    public static final String[] columns = {COLUMN_ID, COLUMN_TITLE, COLUMN_DESCRIPTION, COLUMN_IMAGE_REF,
+    public static final String[] columns = {COLUMN_ID, COLUMN_ITUNES_ID, COLUMN_TITLE, COLUMN_DESCRIPTION, COLUMN_IMAGE_REF,
             COLUMN_FEED_URL, COLUMN_CATEGORY_IDS};
 
     private final static String CREATE =

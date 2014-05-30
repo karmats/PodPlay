@@ -1,11 +1,9 @@
 package se.roshauw.podplay.fragment;
 
-import android.app.SearchManager;
-import android.app.SearchableInfo;
-import android.content.ComponentName;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -17,7 +15,6 @@ import android.view.ViewGroup;
 import android.widget.SearchView;
 
 import se.roshauw.podplay.R;
-import se.roshauw.podplay.activity.SearchPodcastsActivity;
 import se.roshauw.podplay.adapter.CoverFlowAdapter;
 import se.roshauw.podplay.parcel.Podcast;
 import se.roshauw.podplay.task.FetchTopPodcastsTask;
@@ -39,8 +36,7 @@ public class AddPodcastFragment extends Fragment {
      * @return AddPodcastFragment
      */
     public static AddPodcastFragment create() {
-        AddPodcastFragment fragment = new AddPodcastFragment();
-        return fragment;
+        return new AddPodcastFragment();
     }
 
     @Override
@@ -77,11 +73,23 @@ public class AddPodcastFragment extends Fragment {
         inflater.inflate(R.menu.add_podcast_menu, menu);
         MenuItem searchItem = menu.findItem(R.id.menu_search);
         SearchView searchView = (SearchView) searchItem.getActionView();
-        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
-        // Our search activity is the SearchPodcastActivity
-        SearchableInfo info = searchManager.getSearchableInfo(new ComponentName(getActivity().getApplicationContext(),
-                SearchPodcastsActivity.class));
-        searchView.setSearchableInfo(info);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                // Start the search podcast fragment when query text is submitted
+                SearchPodcastFragment searchPodcastFragment = SearchPodcastFragment.create(s);
+                FragmentManager manager = getFragmentManager();
+                manager.beginTransaction().replace(R.id.fragment_container, searchPodcastFragment)
+                        .addToBackStack(null).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                // No autocompletion or live search
+                return false;
+            }
+        });
 
         super.onCreateOptionsMenu(menu, inflater);
 

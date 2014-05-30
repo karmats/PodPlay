@@ -64,7 +64,7 @@ public class CoverFlowFragment extends Fragment {
                 // fragment_container
                 getParentFragment().getFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, viewPodcastFragment).addToBackStack(null)
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit();
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
             }
         });
 

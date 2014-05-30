@@ -19,7 +19,6 @@ import android.widget.TextView;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import se.roshauw.podplay.fragment.SubscribedFragment;
-import se.roshauw.podplay.fragment.ViewPodcastFragment;
 import se.roshauw.podplay.parcel.Podcast;
 import se.roshauw.podplay.parcel.PodcastTrack;
 import se.roshauw.podplay.task.DownloadImageTask;
@@ -112,23 +111,10 @@ public class MainActivity extends FragmentActivity {
             }
         });
 
-        // When a podcast extra is set, this is a result from the
-        // SearchPodcastActivity.
-        // Then we need to start the ViewPodcastFragment
-        Podcast podcastExtra = null;
-        if (null != getIntent() && null != getIntent().getExtras()) {
-            podcastExtra = getIntent().getExtras().getParcelable(PodPlayUtil.EXTRA_PODCAST);
-        }
-        PodPlayUtil.logInfo("Got podcast " + podcastExtra + " as extra");
-        if (null == podcastExtra) {
-            SubscribedFragment subscribedFragment = SubscribedFragment.create();
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, subscribedFragment)
-                    .commit();
-        } else {
-            ViewPodcastFragment viewPodcastFragment = ViewPodcastFragment.create(podcastExtra);
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, viewPodcastFragment)
-                    .commit();
-        }
+        // Start the default fragment, which is the subscribed fragment
+        SubscribedFragment subscribedFragment = SubscribedFragment.create();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, subscribedFragment)
+                .commit();
 
     }
 

@@ -77,6 +77,7 @@ public class ViewPodcastFragment extends Fragment {
 
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                    // Start playing the selected track
                     PodcastTrack trackToPlay = mAdapter.getItem(position);
                     MainActivity mainActivity = (MainActivity) getActivity();
                     mainActivity.playPodcastTrack(mPodcast, trackToPlay);
@@ -103,7 +104,7 @@ public class ViewPodcastFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.menu_subscribe:
                 // If the podcast is subscribed, we unsubscribe to it
-                if (null != mPodcast.getDbId() && unsubscribeToPodcast()) {
+                if (mPodcast.getDbId() >= 0 && unsubscribeToPodcast()) {
                     PodPlayUtil.logDebug("Unsubscribed to podcast");
                 } else {
                     long dbId = subscribeToPodcast();

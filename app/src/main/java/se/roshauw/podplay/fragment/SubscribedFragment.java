@@ -19,6 +19,7 @@ import se.roshauw.podplay.R;
 import se.roshauw.podplay.adapter.ImagePodcastAdapter;
 import se.roshauw.podplay.database.DatabaseHelper;
 import se.roshauw.podplay.parcel.Podcast;
+import se.roshauw.podplay.util.PodPlayUtil;
 
 /**
  * Fragment to show subscribed podcasts. All subscribed podcasts are show in a
@@ -62,13 +63,13 @@ public class SubscribedFragment extends Fragment {
                     AddPodcastFragment addPodcastFragment = AddPodcastFragment.create();
                     FragmentManager manager = getFragmentManager();
                     manager.beginTransaction().replace(R.id.fragment_container, addPodcastFragment)
-                            .addToBackStack(null).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit();
+                            .addToBackStack(null).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
                 } else {
                     // Open the view podcast fragment for the selected podcast
                     Podcast podcast = (Podcast) mImageAdapter.getItem(position);
                     ViewPodcastFragment viewPodcastFragment = ViewPodcastFragment.create(podcast);
                     getFragmentManager().beginTransaction().replace(R.id.fragment_container, viewPodcastFragment)
-                            .addToBackStack(null).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit();
+                            .addToBackStack(null).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
                 }
             }
         });

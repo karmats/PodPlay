@@ -31,6 +31,7 @@ public class Podcast implements Parcelable {
     public Podcast(Long id, String title) {
         this.id = id;
         this.title = title;
+        this.dbId = -1L;
         categoryIds = new ArrayList<Integer>();
         tracks = new ArrayList<PodcastTrack>();
     }
