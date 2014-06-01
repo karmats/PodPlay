@@ -1,5 +1,6 @@
 package se.roshauw.podplay.fragment;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -125,7 +126,9 @@ public class AddPodcastFragment extends Fragment {
         final CoverFlowAdapter adapter = new CoverFlowAdapter(getChildFragmentManager());
 
         // Fetch top podcasts
-        new FetchTopPodcastsTask(getActivity().getApplicationContext(), pager).execute(category);
+        // Use the THREAD_POOL_EXECUTOR since it's concurrent calls
+        new FetchTopPodcastsTask(getActivity().getApplicationContext(), pager).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
+                category);
 
         return adapter;
     }

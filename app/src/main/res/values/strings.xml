@@ -18,6 +18,9 @@
     <string name="menu_search">Search</string>
     <string name="menu_subscribe">Subscribe</string>
 
+    <!-- Image descriptions -->
+    <string name="img_search_item">Podcast image</string>
+
     <!-- Podcast Categories -->
     <string name="arts">Arts</string>
     <string name="comedy">Comedy</string>

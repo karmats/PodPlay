@@ -1,50 +1,48 @@
 package se.roshauw.podplay.adapter;
 
+import android.content.Context;
+import android.os.AsyncTask;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
+
 import java.util.ArrayList;
 
 import se.roshauw.podplay.R;
 import se.roshauw.podplay.parcel.Podcast;
 import se.roshauw.podplay.task.DownloadImageTask;
-import android.content.Context;
-import android.graphics.Color;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.FrameLayout;
-import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 /**
  * Adapter for holding subscribed podcasts.
- * 
+ *
  * @author mats
- * 
  */
 public class ImagePodcastAdapter extends BaseAdapter {
+
     private Context mContext;
-    private ArrayList<Podcast> podcasts;
+    private ArrayList<Podcast> mPodcasts;
 
     public ImagePodcastAdapter(Context c) {
         mContext = c;
-        podcasts = new ArrayList<Podcast>();
+        mPodcasts = new ArrayList<Podcast>();
     }
 
     public void addPodcast(Podcast item) {
-        podcasts.add(item);
+        mPodcasts.add(item);
     }
 
     @Override
     public int getCount() {
         // All podcasts + add new podcast image
-        return podcasts.size() + 1;
+        return mPodcasts.size() + 1;
     }
 
     @Override
     public Object getItem(int position) {
-        return podcasts.get(position);
+        return mPodcasts.get(position);
     }
 
     @Override
@@ -54,64 +52,41 @@ public class ImagePodcastAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        FrameLayout frameLayout;
+        ViewHolder viewHolder = null;
+        boolean lastElement = position == getCount() - 1;
         // if it's not recycled, initialize some
         // attributes
-        if (convertView == null) {
-            // Add new podcast as last elemen
+        if (null == convertView) {
+            // Add new podcast as last element
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            if (position == getCount() - 1) {
-                frameLayout = (FrameLayout) inflater.inflate(R.layout.add_podcast, null);
+            if (lastElement) {
+                convertView = inflater.inflate(R.layout.add_podcast_item, parent, false);
             } else {
-                // Add the podcast images and titles
-                Podcast podcast = podcasts.get(position);
-                frameLayout = (FrameLayout) inflater.inflate(R.layout.subscribed_podcast_item, null);
-
-                TextView tv = (TextView) frameLayout.findViewById(R.id.podcast_title);
-                tv.setText(podcast.getTitle());
-
-                ImageView imageView = (ImageView) frameLayout.findViewById(R.id.podcast_image);
-                new DownloadImageTask(imageView).execute(podcast.getImgUrl());
-
+                // Inflate the text and image view
+                convertView = inflater.inflate(R.layout.subscribed_podcast_item, parent, false);
+                viewHolder = new ViewHolder();
+                viewHolder.textView = (TextView) convertView.findViewById(R.id.podcast_title);
+                viewHolder.imageView = (ImageView) convertView.findViewById(R.id.podcast_image);
+                convertView.setTag(viewHolder);
             }
         } else {
-            frameLayout = (FrameLayout) convertView;
+            viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        return frameLayout;
+        if (!lastElement && null != viewHolder) {
+            // Text and image
+            Podcast podcast = mPodcasts.get(position);
+            viewHolder.textView.setText(podcast.getTitle());
+            new DownloadImageTask(viewHolder.imageView).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, podcast.getImgUrl());
+        }
+
+        return convertView;
     }
 
-    // TODO Remove this and replace with xml-layout-file
-    public FrameLayout createImageLayout(Context c, Podcast entry) {
-
-        FrameLayout frameLayout = new FrameLayout(c);
-        frameLayout.setLayoutParams(new GridView.LayoutParams(GridView.LayoutParams.MATCH_PARENT,
-                GridView.LayoutParams.MATCH_PARENT));
-
-        ImageView imageView = new ImageView(c);
-        imageView.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
-                FrameLayout.LayoutParams.WRAP_CONTENT));
-        imageView.setAdjustViewBounds(true);
-        imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        imageView.setImageResource(R.drawable.filipofredrik);
-        //new DownloadImageTask(imageView).execute(entry.getImgUrl());
-
-        // Add to the view
-        frameLayout.addView(imageView);
-
-        TextView tv = new TextView(c);
-        tv.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
-                FrameLayout.LayoutParams.WRAP_CONTENT, Gravity.BOTTOM));
-        tv.setGravity(Gravity.BOTTOM);
-        tv.setText(entry.getTitle());
-        tv.setPadding(20, 20, 0, 20);
-        tv.setBackgroundColor(Color.BLACK);
-        tv.setAlpha(0.8f);
-        tv.setTextColor(Color.WHITE);
-
-        // Add text view
-        frameLayout.addView(tv);
-        return frameLayout;
+    // View holder
+    static class ViewHolder {
+        ImageView imageView;
+        TextView textView;
     }
 
 }

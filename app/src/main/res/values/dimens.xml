@@ -4,4 +4,16 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
+    <!-- Spacing -->
+    <dimen name="space_s">4dp</dimen>
+    <dimen name="space_m">8dp</dimen>
+    <dimen name="space_l">16dp</dimen>
+
+    <!-- Widths -->
+    <dimen name="width_img_list_view">64dp</dimen>
+
+    <!-- Text sizes -->
+    <dimen name="list_item_title">20sp</dimen>
+    <dimen name="list_item_description">16sp</dimen>
+
 </resources>

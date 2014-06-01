@@ -2,10 +2,10 @@ package se.roshauw.podplay.task;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.widget.ArrayAdapter;
 
 import java.util.ArrayList;
 
+import se.roshauw.podplay.adapter.SearchResultAdapter;
 import se.roshauw.podplay.parcel.Podcast;
 import se.roshauw.podplay.parse.ItunesApiParser;
 
@@ -18,9 +18,9 @@ import se.roshauw.podplay.parse.ItunesApiParser;
 public class SearchPodcastTask extends AsyncTask<String, Void, ArrayList<Podcast>> {
 
     private Context mContext;
-    private ArrayAdapter<Podcast> mAdapter;
+    private SearchResultAdapter mAdapter;
 
-    public SearchPodcastTask(Context context, ArrayAdapter<Podcast> adapter) {
+    public SearchPodcastTask(Context context, SearchResultAdapter adapter) {
         this.mContext = context;
         this.mAdapter = adapter;
     }
@@ -33,9 +33,7 @@ public class SearchPodcastTask extends AsyncTask<String, Void, ArrayList<Podcast
     @Override
     protected void onPostExecute(ArrayList<Podcast> result) {
         // Add the result to the adapter and notify that it has changed
-        for (Podcast podcast : result) {
-            mAdapter.add(podcast);
-        }
+        mAdapter.addPodcasts(result);
         mAdapter.notifyDataSetChanged();
         super.onPostExecute(result);
     }

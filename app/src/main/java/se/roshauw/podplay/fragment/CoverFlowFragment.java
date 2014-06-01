@@ -1,5 +1,6 @@
 package se.roshauw.podplay.fragment;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -86,7 +87,8 @@ public class CoverFlowFragment extends Fragment {
         // Start the mDownloadImageTask
         if (null != mImageView && null != mPodcast) {
             mDownloadImageTask = new DownloadImageTask(mImageView);
-            mDownloadImageTask.execute(mPodcast.getImgUrl());
+            // Use the THREAD_POOL_EXECUTOR since there are a lot of images to download
+            mDownloadImageTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mPodcast.getImgUrl());
         }
         super.onResume();
     }

@@ -53,7 +53,7 @@ public class MainActivity extends FragmentActivity {
     private TextView mDurationTextView;
     private TextView mElapsedTextView;
     private Handler mSeekBarHandler = new Handler();
-    private Runnable mMediaSeekBarTask;
+    private MediaSeekBarTask mMediaSeekBarTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -177,7 +177,7 @@ public class MainActivity extends FragmentActivity {
         mMediaControllerLayout.setVisibility(View.VISIBLE);
         mSeekBarController.setVisibility(View.VISIBLE);
 
-        // Reset the seek bar runnable
+        // Reset the seek bar runnable if it's running
         stopSeekBarTask();
 
         // Reset the podast in case it's already prepared
@@ -233,6 +233,8 @@ public class MainActivity extends FragmentActivity {
             @Override
             public boolean onError(MediaPlayer mp, int what, int extra) {
                 mPlayingText.setText("Got error " + what + " Extra " + extra);
+                // Stop the seekbartask if it's running
+                stopSeekBarTask();
                 // Recreate the mediaplayer
                 mMediaPlayer.release();
                 mMediaPlayer = new MediaPlayer();
@@ -266,6 +268,7 @@ public class MainActivity extends FragmentActivity {
     // private function
     private void stopSeekBarTask() {
         if (null != mMediaSeekBarTask) {
+            mMediaSeekBarTask.cancel();
             mSeekBarHandler.removeCallbacks(mMediaSeekBarTask);
         }
     }
@@ -275,6 +278,7 @@ public class MainActivity extends FragmentActivity {
             if (null == mMediaSeekBarTask) {
                 mMediaSeekBarTask = new MediaSeekBarTask(mSeekBar, mElapsedTextView, mMediaPlayer, mSeekBarHandler);
             }
+            mMediaSeekBarTask.reset();
             mSeekBarHandler.post(mMediaSeekBarTask);
         }
     }

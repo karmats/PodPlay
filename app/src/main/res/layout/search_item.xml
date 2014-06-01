@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/space_s">
+
+    <ImageView
+        android:id="@+id/search_item_thumbnail"
+        android:layout_width="@dimen/width_img_list_view"
+        android:layout_height="@dimen/width_img_list_view"
+        android:layout_alignParentLeft="true"
+        android:contentDescription="@string/img_search_item"
+        android:src="@drawable/filipofredrik" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_toRightOf="@id/search_item_thumbnail"
+        android:layout_marginLeft="@dimen/space_m">
+
+        <TextView
+            android:id="@+id/search_item_title"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="@dimen/list_item_title" />
+
+        <TextView
+            android:id="@+id/search_item_category"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/light_gray"
+            android:textSize="@dimen/list_item_description" />
+
+    </LinearLayout>
+</RelativeLayout>

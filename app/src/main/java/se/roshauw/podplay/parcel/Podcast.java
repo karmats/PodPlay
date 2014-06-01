@@ -6,7 +6,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import se.roshauw.podplay.R;
 import se.roshauw.podplay.database.DatabaseHelper;
@@ -117,11 +116,11 @@ public class Podcast implements Parcelable {
         this.feedUrl = feedUrl;
     }
 
-    public List<Integer> getCategoryIds() {
+    public ArrayList<Integer> getCategoryIds() {
         return categoryIds;
     }
 
-    public List<PodcastTrack> getTracks() {
+    public ArrayList<PodcastTrack> getTracks() {
         return tracks;
     }
 
@@ -206,7 +205,7 @@ public class Podcast implements Parcelable {
          * @param id The category id in itunes
          * @return {@link Category}
          */
-        static Category getCategoryForItunesId(int id) {
+        public static Category getCategoryForItunesId(int id) {
             for (Category c : values()) {
                 if (c.getItunesId() == id) {
                     return c;

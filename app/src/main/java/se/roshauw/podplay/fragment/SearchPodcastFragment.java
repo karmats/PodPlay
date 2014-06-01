@@ -6,10 +6,10 @@ import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import se.roshauw.podplay.R;
+import se.roshauw.podplay.adapter.SearchResultAdapter;
 import se.roshauw.podplay.parcel.Podcast;
 import se.roshauw.podplay.task.SearchPodcastTask;
 import se.roshauw.podplay.util.PodPlayUtil;
@@ -21,7 +21,7 @@ public class SearchPodcastFragment extends ListFragment {
 
     private static final String ARG_QUERY = "query";
 
-    private ArrayAdapter<Podcast> mAdapter;
+    private SearchResultAdapter mAdapter;
 
     /**
      * Creates a new instance of the fragment.
@@ -39,7 +39,7 @@ public class SearchPodcastFragment extends ListFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mAdapter = new ArrayAdapter<Podcast>(getActivity().getApplicationContext(), R.layout.view_podcast_list_item);
+        mAdapter = new SearchResultAdapter(getActivity().getApplicationContext());
         setListAdapter(mAdapter);
         String query = getArguments().getString(ARG_QUERY);
         PodPlayUtil.logInfo("In searchfragment and searching for " + query);
@@ -50,7 +50,7 @@ public class SearchPodcastFragment extends ListFragment {
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         // Open the view podcast framgent
-        Podcast podcast = mAdapter.getItem(position);
+        Podcast podcast = (Podcast) mAdapter.getItem(position);
         ViewPodcastFragment viewPodcastFragment = ViewPodcastFragment.create(podcast);
         getFragmentManager().beginTransaction().replace(R.id.fragment_container, viewPodcastFragment)
                 .addToBackStack(null).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
