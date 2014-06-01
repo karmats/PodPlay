@@ -191,8 +191,7 @@ public class MainActivity extends FragmentActivity {
         } catch (Exception e) {
             mPlayingText.setText(e.getMessage());
             // Recreate the mediaplayer
-            mMediaPlayer.release();
-            mMediaPlayer = new MediaPlayer();
+            resetMediaPlayer();
             PodPlayUtil.logException(e);
         }
 
@@ -233,11 +232,8 @@ public class MainActivity extends FragmentActivity {
             @Override
             public boolean onError(MediaPlayer mp, int what, int extra) {
                 mPlayingText.setText("Got error " + what + " Extra " + extra);
-                // Stop the seekbartask if it's running
-                stopSeekBarTask();
                 // Recreate the mediaplayer
-                mMediaPlayer.release();
-                mMediaPlayer = new MediaPlayer();
+                resetMediaPlayer();
                 return true;
             }
         });
@@ -275,11 +271,19 @@ public class MainActivity extends FragmentActivity {
 
     private void startSeekBarTask() {
         if (mMediaPlayer.isPlaying()) {
-            if (null == mMediaSeekBarTask) {
-                mMediaSeekBarTask = new MediaSeekBarTask(mSeekBar, mElapsedTextView, mMediaPlayer, mSeekBarHandler);
+            if (null != mMediaSeekBarTask) {
+                stopSeekBarTask();
             }
-            mMediaSeekBarTask.reset();
+            mMediaSeekBarTask = new MediaSeekBarTask(mSeekBar, mElapsedTextView, mMediaPlayer, mSeekBarHandler);
             mSeekBarHandler.post(mMediaSeekBarTask);
         }
+    }
+
+    private void resetMediaPlayer() {
+        // TODO Need of change the logic for seekbar
+        stopSeekBarTask();
+        mMediaPlayer.release();
+        mMediaPlayer = new MediaPlayer();
+        mMediaPlayer.setDisplay(mSurfaceHolder);
     }
 }
