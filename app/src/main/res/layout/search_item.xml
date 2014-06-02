@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             style="@style/oneline"
             android:textColor="@color/black"
-            android:textSize="@dimen/list_item_title" />
+            android:textSize="@dimen/text_l" />
 
         <TextView
             android:id="@+id/search_item_author"
@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             style="@style/oneline"
             android:textColor="@color/light_gray"
-            android:textSize="@dimen/list_item_description" />
+            android:textSize="@dimen/text_s" />
 
         <TextView
             android:id="@+id/search_item_category"
@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             style="@style/oneline"
             android:textColor="@color/light_gray"
-            android:textSize="@dimen/list_item_description" />
+            android:textSize="@dimen/text_s" />
 
     </LinearLayout>
 </RelativeLayout>

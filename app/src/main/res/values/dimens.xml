@@ -13,7 +13,8 @@
     <dimen name="width_img_list_view">64dp</dimen>
 
     <!-- Text sizes -->
-    <dimen name="list_item_title">20sp</dimen>
-    <dimen name="list_item_description">12sp</dimen>
+    <dimen name="text_l">20sp</dimen>
+    <dimen name="text_m">16sp</dimen>
+    <dimen name="text_s">12sp</dimen>
 
 </resources>

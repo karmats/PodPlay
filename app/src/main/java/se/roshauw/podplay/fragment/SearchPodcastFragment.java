@@ -39,12 +39,13 @@ public class SearchPodcastFragment extends ListFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.search_results, container, false);
         mAdapter = new SearchResultAdapter(getActivity().getApplicationContext());
         setListAdapter(mAdapter);
         String query = getArguments().getString(ARG_QUERY);
         PodPlayUtil.logInfo("In searchfragment and searching for " + query);
         new SearchPodcastTask(getActivity().getApplicationContext(), mAdapter).execute(query);
-        return super.onCreateView(inflater, container, savedInstanceState);
+        return view;
     }
 
     @Override

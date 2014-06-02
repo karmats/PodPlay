@@ -13,6 +13,7 @@
     <!-- Search strings -->
     <string name="search_hint">Search podcast</string>
     <string name="search_title">Add new podcast</string>
+    <string name="search_no_hits">No podcasts found, try again</string>
 
     <!-- Menu strings -->
     <string name="menu_search">Search</string>
