@@ -21,17 +21,25 @@
 
         <TextView
             android:id="@+id/search_item_title"
-            android:ellipsize="end"
-            android:maxLines="1"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            style="@style/oneline"
             android:textColor="@color/black"
             android:textSize="@dimen/list_item_title" />
+
+        <TextView
+            android:id="@+id/search_item_author"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            style="@style/oneline"
+            android:textColor="@color/light_gray"
+            android:textSize="@dimen/list_item_description" />
 
         <TextView
             android:id="@+id/search_item_category"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            style="@style/oneline"
             android:textColor="@color/light_gray"
             android:textSize="@dimen/list_item_description" />
 

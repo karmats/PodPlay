@@ -17,6 +17,7 @@
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
 
+    <!-- Text styles -->
     <style name="autoscroll">
         <item name="android:singleLine">true</item>
         <item name="android:ellipsize">marquee</item>
@@ -24,6 +25,11 @@
         <item name="android:focusable">true</item>
         <item name="android:focusableInTouchMode">true</item>
         <item name="android:scrollHorizontally">true</item>
+    </style>
+
+    <style name="oneline">
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
     </style>
 
 </resources>

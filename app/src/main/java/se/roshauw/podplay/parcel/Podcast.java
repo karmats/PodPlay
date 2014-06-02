@@ -21,6 +21,7 @@ public class Podcast implements Parcelable {
     private final Long id;
     private final String title;
     private Long dbId;
+    private String author;
     private String description;
     private String imgUrl;
     private String feedUrl;
@@ -40,6 +41,7 @@ public class Podcast implements Parcelable {
         id = data.getLong("id");
         title = data.getString("title");
         dbId = data.getLong("dbId");
+        author = data.getString("author");
         description = data.getString("description");
         imgUrl = data.getString("imgUrl");
         feedUrl = data.getString("feedUrl");
@@ -63,6 +65,7 @@ public class Podcast implements Parcelable {
         data.putLong("id", id);
         data.putString("title", title);
         data.putLong("dbId", dbId);
+        data.putString("author", author);
         data.putString("description", description);
         data.putString("imgUrl", imgUrl);
         data.putString("feedUrl", feedUrl);
@@ -90,6 +93,14 @@ public class Podcast implements Parcelable {
 
     public void setDbId(Long dbId) {
         this.dbId = dbId;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
     }
 
     public String getDescription() {

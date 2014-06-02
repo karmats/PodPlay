@@ -59,12 +59,14 @@ public class SearchResultAdapter extends BaseAdapter {
             viewHolder.imageView = (ImageView) convertView.findViewById(R.id.search_item_thumbnail);
             viewHolder.titleText = (TextView) convertView.findViewById(R.id.search_item_title);
             viewHolder.categoryText = (TextView) convertView.findViewById(R.id.search_item_category);
+            viewHolder.authorText = (TextView) convertView.findViewById(R.id.search_item_author);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
         Podcast podcast = mPodcasts.get(position);
         viewHolder.titleText.setText(podcast.getTitle());
+        viewHolder.authorText.setText(podcast.getAuthor());
         // The first category is enough
         Category category = Category.getCategoryForItunesId(
                 podcast.getCategoryIds().get(0));
@@ -79,5 +81,6 @@ public class SearchResultAdapter extends BaseAdapter {
         private ImageView imageView;
         private TextView titleText;
         private TextView categoryText;
+        private TextView authorText;
     }
 }

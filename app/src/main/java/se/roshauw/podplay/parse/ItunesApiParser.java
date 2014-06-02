@@ -1,25 +1,25 @@
 package se.roshauw.podplay.parse;
 
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URLEncoder;
-import java.util.ArrayList;
+import android.content.Context;
+import android.text.TextUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+
 import se.roshauw.podplay.parcel.Podcast;
 import se.roshauw.podplay.util.HttpConnectionHelper;
 import se.roshauw.podplay.util.PodPlayUtil;
-import android.content.Context;
-import android.text.TextUtils;
 
 /**
  * Parses JSON from itunes.apple.com
- * 
+ *
  * @author mats
- * 
  */
 public class ItunesApiParser {
 
@@ -42,9 +42,8 @@ public class ItunesApiParser {
 
     /**
      * Searches the itunes api for podcast with a specific query
-     * 
-     * @param query
-     *            The query string to search for
+     *
+     * @param query The query string to search for
      * @return List of {@link Podcast}
      */
     public ArrayList<Podcast> searchPodcasts(String query) {
@@ -53,8 +52,9 @@ public class ItunesApiParser {
         try {
             queryUrlEncoded = URLEncoder.encode(query, "UTF-8");
         } catch (UnsupportedEncodingException e) {
+            // N/A UTF-8 is always supported
         }
-        String[] values = { mContext.getResources().getConfiguration().locale.getCountry(), queryUrlEncoded };
+        String[] values = {mContext.getResources().getConfiguration().locale.getCountry(), queryUrlEncoded};
         // Format the url so country and search query will be in it
         String url = TextUtils.expandTemplate(SEARCH_PODCAST_URL, values).toString();
         return getItunesSearchResultForUrl(url);
@@ -63,13 +63,12 @@ public class ItunesApiParser {
 
     /**
      * Get a podcast by its id
-     * 
-     * @param id
-     *            The podcast id
+     *
+     * @param id The podcast id
      * @return {@link Podcast}
      */
     public Podcast getPodcastById(Long id) {
-        String url = TextUtils.expandTemplate(LOOKUP_PODCAST_URL, new String[] { String.valueOf(id) }).toString();
+        String url = TextUtils.expandTemplate(LOOKUP_PODCAST_URL, new String[]{String.valueOf(id)}).toString();
         ArrayList<Podcast> result = getItunesSearchResultForUrl(url);
         // There is only one result one searching by id
         return result.get(0);
@@ -77,9 +76,8 @@ public class ItunesApiParser {
 
     /**
      * Search for top podcasts based on category.
-     * 
-     * @param category
-     *            The category to search for, can be null
+     *
+     * @param category The category to search for, can be null
      * @return List of {@link Podcast}
      */
     public ArrayList<Podcast> getTopPodcasts(Podcast.Category category) {
@@ -89,7 +87,7 @@ public class ItunesApiParser {
         if (category != null) {
             categoryArg = "genre=" + category.getItunesId();
         }
-        String[] values = { mContext.getResources().getConfiguration().locale.getCountry(), categoryArg };
+        String[] values = {mContext.getResources().getConfiguration().locale.getCountry(), categoryArg};
         // Format the url so country and category will be in it
         String url = TextUtils.expandTemplate(TOP_PODCAST_URL, values).toString();
 
@@ -107,6 +105,7 @@ public class ItunesApiParser {
                         String name = entry.getJSONObject("im:name").getString("label");
                         String id = entry.getJSONObject("id").getJSONObject("attributes").getString("im:id");
                         Podcast podcast = new Podcast(Long.parseLong(id), name);
+                        podcast.setAuthor(entry.getJSONObject("im:artist").getString("label"));
                         podcast.setDescription(entry.has("summary") ? entry.getJSONObject("summary").getString("label")
                                 : "");
 
@@ -128,7 +127,8 @@ public class ItunesApiParser {
                         }
                         podcast.getCategoryIds().add(
                                 Integer.parseInt(entry.has("category") ? entry.getJSONObject("category")
-                                        .getJSONObject("attributes").getString("im:id") : "-1"));
+                                        .getJSONObject("attributes").getString("im:id") : "-1")
+                        );
                         result.add(podcast);
                     } catch (JSONException e) {
                         PodPlayUtil.logException(e);
@@ -159,6 +159,7 @@ public class ItunesApiParser {
                     Long id = entry.getLong("trackId");
                     Podcast podcast = new Podcast(id, name);
                     podcast.setImgUrl(entry.getString("artworkUrl60"));
+                    podcast.setAuthor(entry.getString("artistName"));
                     podcast.setFeedUrl(entry.getString("feedUrl"));
                     JSONArray categoryArray = entry.getJSONArray("genreIds");
                     for (int j = 0; j < categoryArray.length(); j++) {
