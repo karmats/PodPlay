@@ -1,16 +1,16 @@
 package se.roshauw.podplay.task;
 
+import android.content.Context;
+import android.os.AsyncTask;
+
 import java.util.ArrayList;
 
+import se.roshauw.podplay.adapter.ViewTracksAdapter;
 import se.roshauw.podplay.parcel.Podcast;
 import se.roshauw.podplay.parcel.PodcastTrack;
 import se.roshauw.podplay.parse.ItunesApiParser;
 import se.roshauw.podplay.parse.RssPodcastParser;
 import se.roshauw.podplay.util.PodPlayUtil;
-
-import android.content.Context;
-import android.os.AsyncTask;
-import android.widget.ArrayAdapter;
 
 /**
  * Fetches podcasttracks from the podcast feed url. When done, updates the given
@@ -20,30 +20,34 @@ import android.widget.ArrayAdapter;
  */
 public class FetchPodcastTracksTask extends AsyncTask<Podcast, Void, ArrayList<PodcastTrack>> {
 
-    private ArrayAdapter<PodcastTrack> mAdapter;
+    private ViewTracksAdapter mAdapter;
     private Context mContext;
 
-    public FetchPodcastTracksTask(Context context, ArrayAdapter<PodcastTrack> adapter) {
+    public FetchPodcastTracksTask(Context context, ViewTracksAdapter adapter) {
         this.mAdapter = adapter;
         this.mContext = context;
     }
 
     @Override
     protected ArrayList<PodcastTrack> doInBackground(Podcast... podcast) {
+        // TODO Rewrite this
         Podcast p = podcast[0];
+        Podcast tmp;
         if (p.getFeedUrl() == null) {
             // If the feed url is missing, a query to the itunes api is needed
-            Podcast tmp = new ItunesApiParser(mContext).getPodcastById(p.getId());
+            tmp = new ItunesApiParser(mContext).getPodcastById(p.getId());
             p.setFeedUrl(tmp.getFeedUrl());
         }
         RssPodcastParser rssParser = new RssPodcastParser();
-        return rssParser.getTracksForPodcast(p);
+        tmp = rssParser.enrichPodcastWithTracks(p);
+        p.setDescription(tmp.getDescription());
+        return p.getTracks();
     }
 
     @Override
     protected void onPostExecute(ArrayList<PodcastTrack> result) {
         PodPlayUtil.logInfo("Fetching podcast tracks done, got " + result.size() + " podcast tracks");
-        mAdapter.addAll(result);
+        mAdapter.addTracks(result);
         mAdapter.notifyDataSetChanged();
         super.onPostExecute(result);
     }

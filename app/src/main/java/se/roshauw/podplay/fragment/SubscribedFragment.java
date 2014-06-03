@@ -19,7 +19,6 @@ import se.roshauw.podplay.R;
 import se.roshauw.podplay.adapter.ImagePodcastAdapter;
 import se.roshauw.podplay.database.DatabaseHelper;
 import se.roshauw.podplay.parcel.Podcast;
-import se.roshauw.podplay.util.PodPlayUtil;
 
 /**
  * Fragment to show subscribed podcasts. All subscribed podcasts are show in a
@@ -88,6 +87,7 @@ public class SubscribedFragment extends Fragment {
             Podcast p = new Podcast(c.getLong(c.getColumnIndex(DatabaseHelper.COLUMN_ITUNES_ID)),
                     c.getString(c.getColumnIndex(DatabaseHelper.COLUMN_TITLE)));
             p.setDbId(c.getLong(c.getColumnIndex(DatabaseHelper.COLUMN_ID)));
+            p.setDescription(c.getString(c.getColumnIndex(DatabaseHelper.COLUMN_DESCRIPTION)));
             p.setFeedUrl(c.getString(c.getColumnIndex(DatabaseHelper.COLUMN_FEED_URL)));
             p.setImgUrl(c.getString(c.getColumnIndex(DatabaseHelper.COLUMN_IMAGE_REF)));
             result.add(p);

@@ -180,7 +180,7 @@ public class MainActivity extends FragmentActivity {
         // Reset the seek bar runnable if it's running
         stopSeekBarTask();
 
-        // Reset the podast in case it's already prepared
+        // Reset the podast in case it's already playing
         mMediaPlayer.reset();
         mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 
@@ -191,7 +191,7 @@ public class MainActivity extends FragmentActivity {
         } catch (Exception e) {
             mPlayingText.setText(e.getMessage());
             // Recreate the mediaplayer
-            resetMediaPlayer();
+            recreateMediaPlayer();
             PodPlayUtil.logException(e);
         }
 
@@ -233,7 +233,7 @@ public class MainActivity extends FragmentActivity {
             public boolean onError(MediaPlayer mp, int what, int extra) {
                 mPlayingText.setText("Got error " + what + " Extra " + extra);
                 // Recreate the mediaplayer
-                resetMediaPlayer();
+                recreateMediaPlayer();
                 return true;
             }
         });
@@ -279,7 +279,7 @@ public class MainActivity extends FragmentActivity {
         }
     }
 
-    private void resetMediaPlayer() {
+    private void recreateMediaPlayer() {
         // TODO Need of change the logic for seekbar
         stopSeekBarTask();
         mMediaPlayer.release();

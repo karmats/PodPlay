@@ -8,9 +8,11 @@
     <dimen name="space_s">4dp</dimen>
     <dimen name="space_m">8dp</dimen>
     <dimen name="space_l">16dp</dimen>
+    <dimen name="space_xl">32dp</dimen>
 
-    <!-- Widths -->
-    <dimen name="width_img_list_view">64dp</dimen>
+    <!-- Heights -->
+    <dimen name="height_img_list_view">64dp</dimen>
+    <dimen name="height_img_view_cover">200dp</dimen>
 
     <!-- Text sizes -->
     <dimen name="text_l">20sp</dimen>

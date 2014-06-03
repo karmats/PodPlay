@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height_img_view_cover">
+
+        <com.flaviofaria.kenburnsview.KenBurnsView
+            android:id="@+id/view_podcast_cover"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/filipofredrik"
+            android:visibility="gone" />
+        <ImageView
+            android:id="@+id/view_podcast_toggle_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_marginRight="@dimen/space_s"
+            android:src="@drawable/ic_action_expand"/>
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/view_podcast_description"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:textColor="@color/light_gray"
+        android:textSize="@dimen/text_m"
+        android:padding="@dimen/space_m" />
+
+</LinearLayout>

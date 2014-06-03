@@ -4,13 +4,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/viewPodcastTitle"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
-
     <ListView
-        android:id="@+id/viewPodcastTracks"
+        android:id="@id/android:list"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" >
     </ListView>

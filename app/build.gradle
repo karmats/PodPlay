@@ -3,12 +3,10 @@ apply plugin: 'android'
 android {
     compileSdkVersion 19
     buildToolsVersion '19.0.3'
-
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 19
     }
-
     buildTypes {
         release {
             runProguard false
@@ -20,4 +18,5 @@ android {
 dependencies {
     compile 'com.android.support:support-v4:+'
     compile 'com.sothree.slidinguppanel:library:+'
+    compile files('libs/KenBurnsView-1.0.1.jar')
 }

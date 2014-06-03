@@ -5,7 +5,7 @@
     android:animateLayoutChanges="true"
     android:gravity="center"
     android:horizontalSpacing="2dp"
-    android:numColumns="2"
+    android:numColumns="3"
     android:stretchMode="columnWidth"
     android:verticalSpacing="2dp" >
 

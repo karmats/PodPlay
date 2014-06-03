@@ -1,21 +1,21 @@
 package se.roshauw.podplay.task;
 
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
-import se.roshauw.podplay.util.PodPlayUtil;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.widget.ImageView;
 
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+import se.roshauw.podplay.util.PodPlayUtil;
+
 /**
  * Task to download image. When completed sets the image to the
  * {@link ImageView} defined in the constructor
- * 
+ *
  * @author mats
- * 
  */
 public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
 
@@ -43,6 +43,7 @@ public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
 
     protected void onPostExecute(Bitmap result) {
         mImageView.setImageBitmap(result);
+        mImageView.setVisibility(ImageView.VISIBLE);
     }
 
     @Override

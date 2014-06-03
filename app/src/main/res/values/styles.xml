@@ -32,4 +32,9 @@
         <item name="android:ellipsize">end</item>
     </style>
 
+    <style name="description_oneline" parent="oneline">
+        <item name="android:textColor">@color/light_gray</item>
+        <item name="android:textSize">@dimen/text_s</item>
+    </style>
+
 </resources>

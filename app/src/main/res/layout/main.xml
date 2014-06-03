@@ -57,10 +57,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:padding="20dp"
-                android:contentDescription="@string/arts"
+                android:padding="@dimen/space_l"
+                android:contentDescription="@string/img_podcast_cover"
                 android:scaleType="fitStart"
-                android:src="@drawable/filipofredrik"
                 android:visibility="gone" />
 
             <SurfaceView
@@ -68,7 +67,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:padding="20dp"
                 android:visibility="gone" />
 
             <LinearLayout
@@ -76,7 +74,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="20dp"
+                android:padding="@dimen/space_l"
                 android:visibility="gone">
 
                 <TextView

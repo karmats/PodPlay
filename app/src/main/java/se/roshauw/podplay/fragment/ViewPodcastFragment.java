@@ -1,25 +1,28 @@
 package se.roshauw.podplay.fragment;
 
+import android.app.ActionBar;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.flaviofaria.kenburnsview.KenBurnsView;
+
 import se.roshauw.podplay.MainActivity;
 import se.roshauw.podplay.R;
+import se.roshauw.podplay.adapter.ViewTracksAdapter;
 import se.roshauw.podplay.database.DatabaseHelper;
 import se.roshauw.podplay.parcel.Podcast;
 import se.roshauw.podplay.parcel.PodcastTrack;
+import se.roshauw.podplay.task.DownloadImageTask;
 import se.roshauw.podplay.task.FetchPodcastTracksTask;
 import se.roshauw.podplay.util.PodPlayUtil;
 
@@ -28,13 +31,13 @@ import se.roshauw.podplay.util.PodPlayUtil;
  *
  * @author mats
  */
-public class ViewPodcastFragment extends Fragment {
+public class ViewPodcastFragment extends ListFragment {
 
     private static String ARG_PODCAST = "podcast";
 
     // The podcast to view
     private Podcast mPodcast;
-    private ArrayAdapter<PodcastTrack> mAdapter;
+    private ViewTracksAdapter mAdapter;
 
     /**
      * Creates a new instance of ViewPodcastFragment.
@@ -58,37 +61,60 @@ public class ViewPodcastFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.view_podcast, container, false);
+        View layout = inflater.inflate(R.layout.view_podcast, container, false);
 
         mPodcast = getArguments().getParcelable(ARG_PODCAST);
         PodPlayUtil.logInfo("Got podcast in fragment " + mPodcast);
 
         if (null != mPodcast) {
-            TextView titleView = (TextView) layout.findViewById(R.id.viewPodcastTitle);
-            titleView.setText(mPodcast.getTitle());
+            // Set action bar title to be the podcast title
+            ActionBar actionBar = getActivity().getActionBar();
+            if (null != actionBar) {
+                actionBar.setTitle(mPodcast.getTitle());
+            }
 
-            mAdapter = new ArrayAdapter<PodcastTrack>(getActivity().getApplicationContext(),
-                    R.layout.view_podcast_list_item);
-
-            ListView trackListView = (ListView) layout.findViewById(R.id.viewPodcastTracks);
-            trackListView.setAdapter(mAdapter);
-
-            trackListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                    // Start playing the selected track
-                    PodcastTrack trackToPlay = mAdapter.getItem(position);
-                    MainActivity mainActivity = (MainActivity) getActivity();
-                    mainActivity.playPodcastTrack(mPodcast, trackToPlay);
-                }
-
-            });
+            mAdapter = new ViewTracksAdapter(getActivity().getApplicationContext());
 
             // Fetch the tracks
             new FetchPodcastTracksTask(getActivity().getApplicationContext(), mAdapter).execute(mPodcast);
         }
         return layout;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        // Add header and set the adapter
+        View headerView = getLayoutInflater(savedInstanceState).inflate(R.layout.view_podcast_header, getListView(), false);
+        final TextView descriptionText = (TextView) headerView.findViewById(R.id.view_podcast_description);
+        descriptionText.setText(mPodcast.getDescription());
+        final ImageView toggleImg = (ImageView) headerView.findViewById(R.id.view_podcast_toggle_description);
+        KenBurnsView coverImage = (KenBurnsView) headerView.findViewById(R.id.view_podcast_cover);
+        coverImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (descriptionText.getVisibility() == View.GONE) {
+                    toggleImg.setImageResource(R.drawable.ic_action_collapse);
+                    descriptionText.setVisibility(View.VISIBLE);
+                } else {
+                    descriptionText.setVisibility(View.GONE);
+                    toggleImg.setImageResource(R.drawable.ic_action_expand);
+                }
+            }
+        });
+        new DownloadImageTask(coverImage).execute(mPodcast.getImgUrl());
+
+        getListView().addHeaderView(headerView, null, false);
+        // Important that the list adapter is set AFTER we added the header see
+        // http://developer.android.com/reference/android/widget/ListView.html#addHeaderView(android.view.View)
+        setListAdapter(mAdapter);
+    }
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        // Start playing the selected track
+        PodcastTrack trackToPlay = (PodcastTrack) mAdapter.getItem(position);
+        MainActivity mainActivity = (MainActivity) getActivity();
+        mainActivity.playPodcastTrack(mPodcast, trackToPlay);
     }
 
     @Override

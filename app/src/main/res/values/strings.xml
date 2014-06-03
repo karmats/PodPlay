@@ -21,6 +21,7 @@
 
     <!-- Image descriptions -->
     <string name="img_search_item">Podcast image</string>
+    <string name="img_podcast_cover">Podcast cover image</string>
 
     <!-- Podcast Categories -->
     <string name="arts">Arts</string>

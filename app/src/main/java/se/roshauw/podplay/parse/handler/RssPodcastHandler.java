@@ -1,24 +1,35 @@
 package se.roshauw.podplay.parse.handler;
 
-import java.util.ArrayList;
-
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
 
+import java.util.ArrayList;
+
+import se.roshauw.podplay.parcel.Podcast;
 import se.roshauw.podplay.parcel.PodcastTrack;
+import se.roshauw.podplay.util.PodPlayUtil;
 
 /**
  * Handler for parsing podcast rss.
- * 
+ *
  * @author mats
- * 
  */
 public class RssPodcastHandler extends DefaultHandler {
 
+    private Podcast podcast;
     private ArrayList<PodcastTrack> podcastTracks;
 
     private PodcastTrack currentPodcastTrack;
     private StringBuilder stringBuilder;
+
+    /**
+     * Creates a new instance of RssPodcastHandler
+     *
+     * @param podcast The Podcast to get the tracks for
+     */
+    public RssPodcastHandler(Podcast podcast) {
+        this.podcast = podcast;
+    }
 
     @Override
     public void startDocument() {
@@ -26,10 +37,11 @@ public class RssPodcastHandler extends DefaultHandler {
     }
 
     /**
-     * @return The parsed list with tracks
+     * @return Enriched podcast with tracks and description
      */
-    public ArrayList<PodcastTrack> getResult() {
-        return podcastTracks;
+    public Podcast getResult() {
+        podcast.getTracks().addAll(podcastTracks);
+        return podcast;
     }
 
     @Override
@@ -58,12 +70,20 @@ public class RssPodcastHandler extends DefaultHandler {
 
     @Override
     public void endElement(String uri, String localName, String qName) {
+        String value = stringBuilder.toString();
+        if ("description".equals(qName)) {
+            PodPlayUtil.logDebug("Description is " + value);
+        }
         if (currentPodcastTrack != null) {
-            String value = stringBuilder.toString();
             if ("title".equals(qName)) {
                 currentPodcastTrack.setTitle(value);
-            } else if ("itunes:summary".equals(qName)) {
+            } else if ("description".equals(qName) || "itunes:summary".equals(qName)) {
                 currentPodcastTrack.setDescription(value);
+            }
+        } else {
+            if ("description".equals(qName)) {
+                PodPlayUtil.logDebug("Setting description " + value);
+                podcast.setDescription(value);
             }
         }
     }
