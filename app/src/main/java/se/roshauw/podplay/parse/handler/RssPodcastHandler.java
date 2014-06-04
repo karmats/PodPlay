@@ -7,7 +7,6 @@ import java.util.ArrayList;
 
 import se.roshauw.podplay.parcel.Podcast;
 import se.roshauw.podplay.parcel.PodcastTrack;
-import se.roshauw.podplay.util.PodPlayUtil;
 
 /**
  * Handler for parsing podcast rss.
@@ -71,9 +70,6 @@ public class RssPodcastHandler extends DefaultHandler {
     @Override
     public void endElement(String uri, String localName, String qName) {
         String value = stringBuilder.toString();
-        if ("description".equals(qName)) {
-            PodPlayUtil.logDebug("Description is " + value);
-        }
         if (currentPodcastTrack != null) {
             if ("title".equals(qName)) {
                 currentPodcastTrack.setTitle(value);
@@ -82,7 +78,6 @@ public class RssPodcastHandler extends DefaultHandler {
             }
         } else {
             if ("description".equals(qName)) {
-                PodPlayUtil.logDebug("Setting description " + value);
                 podcast.setDescription(value);
             }
         }

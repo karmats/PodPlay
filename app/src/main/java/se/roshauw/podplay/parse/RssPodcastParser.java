@@ -11,9 +11,8 @@ import se.roshauw.podplay.util.HttpConnectionHelper;
 
 /**
  * Parses a podcast rss feed
- * 
+ *
  * @author mats
- * 
  */
 public class RssPodcastParser {
 
@@ -25,10 +24,9 @@ public class RssPodcastParser {
 
     /**
      * Enriches a podcast with tracks and description
-     * 
-     * @param podcast
-     *            The podcast to get the tracklist for
-     * @return Podcast
+     *
+     * @param podcast The podcast to get the tracklist for
+     * @return An enriched Podcast
      */
     public Podcast enrichPodcastWithTracks(Podcast podcast) {
         try {

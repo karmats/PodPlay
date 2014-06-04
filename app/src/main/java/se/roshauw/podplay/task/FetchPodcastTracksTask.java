@@ -2,12 +2,10 @@ package se.roshauw.podplay.task;
 
 import android.content.Context;
 import android.os.AsyncTask;
-
-import java.util.ArrayList;
+import android.widget.TextView;
 
 import se.roshauw.podplay.adapter.ViewTracksAdapter;
 import se.roshauw.podplay.parcel.Podcast;
-import se.roshauw.podplay.parcel.PodcastTrack;
 import se.roshauw.podplay.parse.ItunesApiParser;
 import se.roshauw.podplay.parse.RssPodcastParser;
 import se.roshauw.podplay.util.PodPlayUtil;
@@ -18,18 +16,20 @@ import se.roshauw.podplay.util.PodPlayUtil;
  *
  * @author mats
  */
-public class FetchPodcastTracksTask extends AsyncTask<Podcast, Void, ArrayList<PodcastTrack>> {
+public class FetchPodcastTracksTask extends AsyncTask<Podcast, Void, Podcast> {
 
-    private ViewTracksAdapter mAdapter;
     private Context mContext;
+    private ViewTracksAdapter mAdapter;
+    private TextView mDescriptionTextView;
 
-    public FetchPodcastTracksTask(Context context, ViewTracksAdapter adapter) {
-        this.mAdapter = adapter;
+    public FetchPodcastTracksTask(Context context, ViewTracksAdapter adapter, TextView descriptionTextView) {
         this.mContext = context;
+        this.mAdapter = adapter;
+        this.mDescriptionTextView = descriptionTextView;
     }
 
     @Override
-    protected ArrayList<PodcastTrack> doInBackground(Podcast... podcast) {
+    protected Podcast doInBackground(Podcast... podcast) {
         // TODO Rewrite this
         Podcast p = podcast[0];
         Podcast tmp;
@@ -39,16 +39,16 @@ public class FetchPodcastTracksTask extends AsyncTask<Podcast, Void, ArrayList<P
             p.setFeedUrl(tmp.getFeedUrl());
         }
         RssPodcastParser rssParser = new RssPodcastParser();
-        tmp = rssParser.enrichPodcastWithTracks(p);
-        p.setDescription(tmp.getDescription());
-        return p.getTracks();
+        rssParser.enrichPodcastWithTracks(p);
+        PodPlayUtil.logDebug("Podcast has description " + p.getDescription());
+        return p;
     }
 
     @Override
-    protected void onPostExecute(ArrayList<PodcastTrack> result) {
-        PodPlayUtil.logInfo("Fetching podcast tracks done, got " + result.size() + " podcast tracks");
-        mAdapter.addTracks(result);
+    protected void onPostExecute(Podcast result) {
+        mAdapter.addTracks(result.getTracks());
         mAdapter.notifyDataSetChanged();
+        mDescriptionTextView.setText(result.getDescription());
         super.onPostExecute(result);
     }
 

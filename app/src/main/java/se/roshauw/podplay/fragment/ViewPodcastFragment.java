@@ -74,9 +74,6 @@ public class ViewPodcastFragment extends ListFragment {
             }
 
             mAdapter = new ViewTracksAdapter(getActivity().getApplicationContext());
-
-            // Fetch the tracks
-            new FetchPodcastTracksTask(getActivity().getApplicationContext(), mAdapter).execute(mPodcast);
         }
         return layout;
     }
@@ -102,6 +99,8 @@ public class ViewPodcastFragment extends ListFragment {
             }
         });
         new DownloadImageTask(coverImage).execute(mPodcast.getImgUrl());
+        // Fetch the tracks
+        new FetchPodcastTracksTask(getActivity().getApplicationContext(), mAdapter, descriptionText).execute(mPodcast);
 
         getListView().addHeaderView(headerView, null, false);
         // Important that the list adapter is set AFTER we added the header see
@@ -112,7 +111,8 @@ public class ViewPodcastFragment extends ListFragment {
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         // Start playing the selected track
-        PodcastTrack trackToPlay = (PodcastTrack) mAdapter.getItem(position);
+        // The header has position 0, so we need to decrease position by 1
+        PodcastTrack trackToPlay = (PodcastTrack) mAdapter.getItem(position - 1);
         MainActivity mainActivity = (MainActivity) getActivity();
         mainActivity.playPodcastTrack(mPodcast, trackToPlay);
     }
