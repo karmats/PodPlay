@@ -2,6 +2,7 @@ package se.roshauw.podplay.fragment;
 
 import android.app.ActionBar;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -81,11 +83,11 @@ public class ViewPodcastFragment extends ListFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         // Add header and set the adapter
-        View headerView = getLayoutInflater(savedInstanceState).inflate(R.layout.view_podcast_header, getListView(), false);
+        final View headerView = getLayoutInflater(savedInstanceState).inflate(R.layout.view_podcast_header, getListView(), false);
         final TextView descriptionText = (TextView) headerView.findViewById(R.id.view_podcast_description);
         descriptionText.setText(mPodcast.getDescription());
         final ImageView toggleImg = (ImageView) headerView.findViewById(R.id.view_podcast_toggle_description);
-        KenBurnsView coverImage = (KenBurnsView) headerView.findViewById(R.id.view_podcast_cover);
+        final KenBurnsView coverImage = (KenBurnsView) headerView.findViewById(R.id.view_podcast_cover);
         coverImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -106,6 +108,28 @@ public class ViewPodcastFragment extends ListFragment {
         // Important that the list adapter is set AFTER we added the header see
         // http://developer.android.com/reference/android/widget/ListView.html#addHeaderView(android.view.View)
         setListAdapter(mAdapter);
+
+        getListView().setOnScrollListener(new AbsListView.OnScrollListener() {
+            // Value to avoid unecessarry parallax effect
+            private int lastTopValueAssigned;
+
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int scrollState) {
+            }
+
+            @Override
+            public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                Rect rect = new Rect();
+                coverImage.getLocalVisibleRect(rect);
+
+                if (lastTopValueAssigned != rect.top) {
+                    lastTopValueAssigned = rect.top;
+                    coverImage.setY((float) (rect.top / 2.0));
+                    float alpha = coverImage.getY() / coverImage.getHeight();
+                    coverImage.setAlpha(1 - alpha);
+                }
+            }
+        });
     }
 
     @Override
