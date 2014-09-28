@@ -150,8 +150,8 @@ public class MainActivity extends FragmentActivity {
 
     @Override
     public void onBackPressed() {
-        if (mSlidingUpPanelLayout.isExpanded()) {
-            mSlidingUpPanelLayout.collapsePane();
+        if (mSlidingUpPanelLayout.isPanelExpanded()) {
+            mSlidingUpPanelLayout.collapsePanel();
         } else {
             super.onBackPressed();
         }
@@ -164,6 +164,8 @@ public class MainActivity extends FragmentActivity {
      * @param podcastTrack The track to play
      */
     public void playPodcastTrack(final Podcast podcast, final PodcastTrack podcastTrack) {
+        // Show the sliding up panel
+        mSlidingUpPanelLayout.showPanel();
         // Setup the podcast image or video if this is a video podcast
         if (podcastTrack.getType() == PodcastTrack.TYPE_VIDEO) {
             mPodcastVideoView.setVisibility(View.VISIBLE);

@@ -18,7 +18,7 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:+'
+    compile 'com.android.support:support-v4:19.0.+'
     compile 'com.sothree.slidinguppanel:library:+'
     compile files('libs/KenBurnsView-1.0.1.jar')
 }
